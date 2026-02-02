@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { Prisma, ReviewStatus } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,26 +24,26 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     // Build where clause based on user role
-    let whereClause: any = {}
-    
+    let whereClause: Prisma.GameWhereInput = {}
+
     if (user.role === 'admin') {
       whereClause = {}
     } else if (user.role === 'reviewer') {
       whereClause = {
         OR: [
-          { reviewStatus: 'published' },
-          { reviewStatus: 'under_review' }
+          { reviewStatus: ReviewStatus.published },
+          { reviewStatus: ReviewStatus.under_review }
         ]
       }
     } else if (user.role === 'editor') {
       whereClause = {
         OR: [
           { contributorId: user.id },
-          { reviewStatus: 'published' }
+          { reviewStatus: ReviewStatus.published }
         ]
       }
     } else {
-      whereClause = { reviewStatus: 'published' }
+      whereClause = { reviewStatus: ReviewStatus.published }
     }
 
     // Add search filter
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
 
     // Add status filter
     if (status !== 'all') {
-      whereClause.reviewStatus = status
+      whereClause.reviewStatus = status as ReviewStatus
     }
 
     // Add country filter
@@ -107,16 +108,16 @@ export async function GET(request: NextRequest) {
     })
 
     // Get stats
-    const statsWhereClause = user.role === 'admin' ? {} : 
-      user.role === 'reviewer' ? { OR: [{ reviewStatus: 'published' }, { reviewStatus: 'under_review' }] } :
-      user.role === 'editor' ? { OR: [{ contributorId: user.id }, { reviewStatus: 'published' }] } :
-      { reviewStatus: 'published' }
+    const statsWhereClause: Prisma.GameWhereInput = user.role === 'admin' ? {} :
+      user.role === 'reviewer' ? { OR: [{ reviewStatus: ReviewStatus.published }, { reviewStatus: ReviewStatus.under_review }] } :
+      user.role === 'editor' ? { OR: [{ contributorId: user.id }, { reviewStatus: ReviewStatus.published }] } :
+      { reviewStatus: ReviewStatus.published }
 
     const stats = {
       total: await db.game.count({ where: statsWhereClause }),
-      published: await db.game.count({ where: { ...statsWhereClause, reviewStatus: 'published' } }),
-      underReview: await db.game.count({ where: { ...statsWhereClause, reviewStatus: 'under_review' } }),
-      draft: await db.game.count({ where: { ...statsWhereClause, reviewStatus: 'draft' } })
+      published: await db.game.count({ where: { ...statsWhereClause, reviewStatus: ReviewStatus.published } }),
+      underReview: await db.game.count({ where: { ...statsWhereClause, reviewStatus: ReviewStatus.under_review } }),
+      draft: await db.game.count({ where: { ...statsWhereClause, reviewStatus: ReviewStatus.draft } })
     }
 
     // Get countries for filter

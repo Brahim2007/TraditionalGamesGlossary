@@ -1,14 +1,9 @@
+'use client';
+
 /**
  * Offline Page
  * صفحة عدم الاتصال
  */
-
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'غير متصل | مسرد الألعاب التراثية',
-  description: 'يبدو أنك غير متصل بالإنترنت',
-};
 
 export default function OfflinePage() {
   return (

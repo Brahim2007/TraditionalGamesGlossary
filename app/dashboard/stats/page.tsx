@@ -172,7 +172,7 @@ export default async function StatsPage() {
                       {activity.action === 'updated' && (
                         <Clock className="w-6 h-6 text-white" />
                       )}
-                      {activity.action === 'reviewed' && (
+                      {activity.action === 'approved' && (
                         <Users className="w-6 h-6 text-white" />
                       )}
                     </div>

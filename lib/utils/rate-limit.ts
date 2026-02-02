@@ -348,8 +348,10 @@ export async function initUpstashRateLimiter() {
   }
   
   try {
-    // Dynamically import Upstash modules
+    // Dynamically import Upstash modules (optional dependencies)
+    // @ts-expect-error - Optional dependency, may not be installed
     const { Ratelimit } = await import('@upstash/ratelimit');
+    // @ts-expect-error - Optional dependency, may not be installed
     const { Redis } = await import('@upstash/redis');
     
     const redis = new Redis({

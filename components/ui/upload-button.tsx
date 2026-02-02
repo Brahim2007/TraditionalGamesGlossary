@@ -28,7 +28,7 @@ export function UploadButton({
 
   return (
     <div className={cn("space-y-4", className)}>
-      <UploadButtonPrimitive<OurFileRouter>
+      <UploadButtonPrimitive<OurFileRouter, "gameImage">
         endpoint="gameImage"
         onUploadBegin={() => {
           setIsUploading(true);

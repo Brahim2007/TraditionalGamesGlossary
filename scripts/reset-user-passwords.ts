@@ -1,4 +1,4 @@
-سم#!/usr/bin/env tsx
+#!/usr/bin/env tsx
 
 // سكريبت إعادة تعيين كلمات مرور المستخدمين
 // Reset User Passwords Script

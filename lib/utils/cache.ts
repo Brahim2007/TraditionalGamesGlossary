@@ -504,8 +504,8 @@ export async function invalidateAllGamesCacheNext(): Promise<void> {
  */
 export const getCachedPublishedGames = cachedFunction(
   async () => {
-    const { prisma } = await import('../db');
-    return prisma.game.findMany({
+    const { db } = await import('../db');
+    return db.game.findMany({
       where: { reviewStatus: 'published' },
       orderBy: { publishedAt: 'desc' },
       take: 50,
@@ -525,8 +525,8 @@ export const getCachedPublishedGames = cachedFunction(
 export function getCachedGameBySlug(slug: string) {
   return cachedFunction(
     async () => {
-      const { prisma } = await import('../db');
-      return prisma.game.findUnique({
+      const { db } = await import('../db');
+      return db.game.findUnique({
         where: { slug },
         include: {
           country: true,
@@ -551,8 +551,8 @@ export function getCachedGameBySlug(slug: string) {
  */
 export const getCachedCountries = cachedFunction(
   async () => {
-    const { prisma } = await import('../db');
-    return prisma.country.findMany({
+    const { db } = await import('../db');
+    return db.country.findMany({
       orderBy: { name: 'asc' },
     });
   },
@@ -569,8 +569,8 @@ export const getCachedCountries = cachedFunction(
  */
 export const getCachedHeritageFields = cachedFunction(
   async () => {
-    const { prisma } = await import('../db');
-    return prisma.heritageField.findMany({
+    const { db } = await import('../db');
+    return db.heritageField.findMany({
       orderBy: { name: 'asc' },
     });
   },
@@ -587,7 +587,7 @@ export const getCachedHeritageFields = cachedFunction(
  */
 export const getCachedDashboardStats = cachedFunction(
   async () => {
-    const { prisma } = await import('../db');
+    const { db } = await import('../db');
     
     const [
       totalGames,
@@ -597,12 +597,12 @@ export const getCachedDashboardStats = cachedFunction(
       pendingSimilarities,
       totalContributors,
     ] = await Promise.all([
-      prisma.game.count(),
-      prisma.game.count({ where: { reviewStatus: 'published' } }),
-      prisma.game.count({ where: { reviewStatus: 'draft' } }),
-      prisma.game.count({ where: { reviewStatus: 'under_review' } }),
-      prisma.gameSimilarity.count({ where: { status: 'pending' } }),
-      prisma.contributor.count(),
+      db.game.count(),
+      db.game.count({ where: { reviewStatus: 'published' } }),
+      db.game.count({ where: { reviewStatus: 'draft' } }),
+      db.game.count({ where: { reviewStatus: 'under_review' } }),
+      db.gameSimilarity.count({ where: { status: 'pending' } }),
+      db.contributor.count(),
     ]);
     
     return {
