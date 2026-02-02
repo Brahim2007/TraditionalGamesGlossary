@@ -1,0 +1,721 @@
+{
+  "designSystem": {
+    "projectName": "Traditional Games Glossary",
+    "designLanguage": "Modern Persian/Arabic UI",
+    "direction": "RTL (Right-to-Left)",
+    "version": "1.0.0",
+    
+    "designPrinciples": {
+      "primary": [
+        "Content-first approach with emphasis on readability in Persian/Arabic script",
+        "Rich, sophisticated color palette centered around deep greens and earthy tones",
+        "Card-based layouts with soft shadows for depth and hierarchy",
+        "Generous whitespace to allow content to breathe",
+        "Smooth, organic curves and rounded corners throughout",
+        "Layered depth with overlapping elements and subtle gradients"
+      ],
+      "accessibility": [
+        "High contrast text on backgrounds",
+        "Clear visual hierarchy",
+        "Consistent spacing and alignment for RTL reading patterns"
+      ]
+    },
+
+    "colorPalette": {
+      "primary": {
+        "green": {
+          "dark": "#1a3d32",
+          "main": "#2d5f4f",
+          "medium": "#3d7563",
+          "light": "#4a8c77",
+          "description": "Deep forest green used for headers, primary sections, and hero areas"
+        },
+        "sage": {
+          "main": "#5a8f7b",
+          "light": "#7ba393",
+          "description": "Softer green for secondary elements and overlays"
+        }
+      },
+      "secondary": {
+        "cream": {
+          "main": "#f5f5f0",
+          "warm": "#faf9f5",
+          "description": "Warm off-white for main content backgrounds"
+        },
+        "brown": {
+          "dark": "#3d2e27",
+          "medium": "#4a3730",
+          "light": "#6b5850",
+          "description": "Rich brown for book spines, cards, and secondary headers"
+        }
+      },
+      "accent": {
+        "coral": {
+          "main": "#ff6b6b",
+          "light": "#ff8787",
+          "description": "Vibrant coral/red for books, badges, and CTAs"
+        },
+        "gold": {
+          "main": "#d4af37",
+          "light": "#e6c758",
+          "description": "Gold for premium elements and highlights"
+        },
+        "teal": {
+          "main": "#4a9d9c",
+          "light": "#6db5b4",
+          "description": "Teal for book covers and accent cards"
+        },
+        "peach": {
+          "main": "#f4a582",
+          "light": "#f7b89a",
+          "description": "Soft peach for warm accents"
+        },
+        "yellow": {
+          "main": "#f7d794",
+          "light": "#fae3ad",
+          "description": "Soft yellow for highlights and badges"
+        }
+      },
+      "neutral": {
+        "black": "#0a0a0a",
+        "darkGray": "#333333",
+        "mediumGray": "#666666",
+        "lightGray": "#999999",
+        "paleGray": "#e0e0e0",
+        "white": "#ffffff"
+      },
+      "semantic": {
+        "success": "#52c41a",
+        "warning": "#faad14",
+        "error": "#f5222d",
+        "info": "#1890ff"
+      }
+    },
+
+    "typography": {
+      "fontFamilies": {
+        "primary": {
+          "name": "IBM Plex Sans Arabic",
+          "fallback": "'IBM Plex Sans Arabic', 'IBM Plex Sans Arabic Fallback', sans-serif",
+          "description": "Modern Arabic font with excellent legibility, used for all body text and UI elements"
+        },
+        "heading": {
+          "name": "IBM Plex Sans Arabic",
+          "fallback": "'IBM Plex Sans Arabic', 'IBM Plex Sans Arabic Fallback', sans-serif",
+          "description": "Same font family for headings with adjusted weight for emphasis"
+        },
+        "display": {
+          "name": "IBM Plex Sans Arabic",
+          "fallback": "'IBM Plex Sans Arabic', 'IBM Plex Sans Arabic Fallback', sans-serif",
+          "description": "Display font using heavier weights for hero sections and special callouts"
+        }
+      },
+      "typeScale": {
+        "hero": {
+          "fontSize": "48px",
+          "lineHeight": "1.2",
+          "fontWeight": "700",
+          "letterSpacing": "-0.02em",
+          "usage": "Main hero headlines"
+        },
+        "h1": {
+          "fontSize": "36px",
+          "lineHeight": "1.3",
+          "fontWeight": "700",
+          "letterSpacing": "-0.01em",
+          "usage": "Page titles"
+        },
+        "h2": {
+          "fontSize": "28px",
+          "lineHeight": "1.4",
+          "fontWeight": "600",
+          "letterSpacing": "0",
+          "usage": "Section headers"
+        },
+        "h3": {
+          "fontSize": "22px",
+          "lineHeight": "1.4",
+          "fontWeight": "600",
+          "letterSpacing": "0",
+          "usage": "Subsection headers, card titles"
+        },
+        "h4": {
+          "fontSize": "18px",
+          "lineHeight": "1.5",
+          "fontWeight": "600",
+          "letterSpacing": "0",
+          "usage": "Small headers, prominent labels"
+        },
+        "body": {
+          "fontSize": "16px",
+          "lineHeight": "1.75",
+          "fontWeight": "400",
+          "letterSpacing": "0",
+          "usage": "Main body text"
+        },
+        "bodySmall": {
+          "fontSize": "14px",
+          "lineHeight": "1.6",
+          "fontWeight": "400",
+          "letterSpacing": "0",
+          "usage": "Secondary text, captions"
+        },
+        "caption": {
+          "fontSize": "12px",
+          "lineHeight": "1.5",
+          "fontWeight": "400",
+          "letterSpacing": "0.01em",
+          "usage": "Metadata, small labels"
+        },
+        "button": {
+          "fontSize": "15px",
+          "lineHeight": "1.4",
+          "fontWeight": "500",
+          "letterSpacing": "0.01em",
+          "usage": "Buttons and CTAs"
+        }
+      },
+      "textStyles": {
+        "emphasis": {
+          "fontWeight": "600",
+          "description": "For emphasized inline text"
+        },
+        "subtle": {
+          "opacity": "0.7",
+          "description": "For de-emphasized text"
+        },
+        "link": {
+          "textDecoration": "none",
+          "hoverDecoration": "underline",
+          "description": "Text links inherit color, underline on hover"
+        }
+      }
+    },
+
+    "spacing": {
+      "scale": {
+        "xs": "4px",
+        "sm": "8px",
+        "md": "16px",
+        "lg": "24px",
+        "xl": "32px",
+        "2xl": "48px",
+        "3xl": "64px",
+        "4xl": "96px",
+        "5xl": "128px"
+      },
+      "component": {
+        "cardPadding": "24px",
+        "cardGap": "16px",
+        "sectionPadding": "64px 24px",
+        "containerMaxWidth": "1280px",
+        "gridGap": "24px",
+        "inputPadding": "12px 16px"
+      },
+      "layout": {
+        "headerHeight": "80px",
+        "footerHeight": "auto",
+        "sidebarWidth": "280px",
+        "contentMaxWidth": "1200px"
+      }
+    },
+
+    "borderRadius": {
+      "none": "0px",
+      "sm": "4px",
+      "md": "8px",
+      "lg": "12px",
+      "xl": "16px",
+      "2xl": "24px",
+      "3xl": "32px",
+      "round": "50%",
+      "pill": "999px",
+      "description": "Generous rounded corners throughout, cards use lg-xl, buttons use lg"
+    },
+
+    "shadows": {
+      "sm": {
+        "value": "0 2px 4px rgba(0, 0, 0, 0.08)",
+        "usage": "Subtle elevation for small cards"
+      },
+      "md": {
+        "value": "0 4px 12px rgba(0, 0, 0, 0.12)",
+        "usage": "Standard card shadow"
+      },
+      "lg": {
+        "value": "0 8px 24px rgba(0, 0, 0, 0.15)",
+        "usage": "Elevated cards, dropdowns"
+      },
+      "xl": {
+        "value": "0 16px 48px rgba(0, 0, 0, 0.2)",
+        "usage": "Modals, overlays"
+      },
+      "inner": {
+        "value": "inset 0 2px 4px rgba(0, 0, 0, 0.06)",
+        "usage": "Inset elements like inputs"
+      },
+      "colored": {
+        "green": "0 4px 12px rgba(45, 95, 79, 0.25)",
+        "coral": "0 4px 12px rgba(255, 107, 107, 0.25)"
+      }
+    },
+
+    "components": {
+      "navigation": {
+        "header": {
+          "background": "linear-gradient(180deg, rgba(26, 61, 50, 0.95) 0%, rgba(45, 95, 79, 0.9) 100%)",
+          "backdropBlur": "10px",
+          "height": "80px",
+          "padding": "0 32px",
+          "position": "sticky",
+          "zIndex": "100",
+          "borderBottom": "1px solid rgba(255, 255, 255, 0.1)"
+        },
+        "logo": {
+          "fontSize": "28px",
+          "fontWeight": "700",
+          "color": "#ffffff",
+          "spacing": "0"
+        },
+        "navLinks": {
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "color": "rgba(255, 255, 255, 0.85)",
+          "hoverColor": "#ffffff",
+          "spacing": "24px",
+          "transition": "all 0.3s ease"
+        },
+        "mobileMenu": {
+          "background": "#2d5f4f",
+          "padding": "24px",
+          "borderRadius": "0 0 16px 16px"
+        }
+      },
+
+      "hero": {
+        "background": "linear-gradient(135deg, #2d5f4f 0%, #3d7563 50%, #1a3d32 100%)",
+        "overlay": "url('/pattern.svg') center/cover, linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4))",
+        "padding": "120px 32px",
+        "minHeight": "500px",
+        "textColor": "#ffffff",
+        "borderRadius": "0 0 32px 32px",
+        "textAlign": "center"
+      },
+
+      "cards": {
+        "base": {
+          "background": "#ffffff",
+          "borderRadius": "16px",
+          "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.12)",
+          "padding": "24px",
+          "transition": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "hover": {
+            "transform": "translateY(-4px)",
+            "boxShadow": "0 8px 24px rgba(0, 0, 0, 0.18)"
+          }
+        },
+        "bookCard": {
+          "aspectRatio": "2/3",
+          "borderRadius": "12px",
+          "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.15)",
+          "overflow": "hidden",
+          "position": "relative",
+          "hover": {
+            "transform": "scale(1.05) translateY(-8px)",
+            "boxShadow": "0 12px 28px rgba(0, 0, 0, 0.25)"
+          }
+        },
+        "featureCard": {
+          "background": "linear-gradient(135deg, rgba(77, 61, 53, 0.95) 0%, rgba(61, 46, 39, 1) 100%)",
+          "borderRadius": "20px",
+          "padding": "32px",
+          "color": "#ffffff",
+          "minHeight": "240px"
+        },
+        "statisticCard": {
+          "background": "#ffffff",
+          "borderRadius": "16px",
+          "padding": "24px",
+          "textAlign": "center",
+          "border": "1px solid rgba(0, 0, 0, 0.08)"
+        }
+      },
+
+      "buttons": {
+        "primary": {
+          "background": "linear-gradient(135deg, #d4af37 0%, #e6c758 100%)",
+          "color": "#1a3d32",
+          "padding": "14px 32px",
+          "borderRadius": "12px",
+          "fontSize": "15px",
+          "fontWeight": "600",
+          "border": "none",
+          "boxShadow": "0 4px 12px rgba(212, 175, 55, 0.3)",
+          "transition": "all 0.3s ease",
+          "hover": {
+            "background": "linear-gradient(135deg, #e6c758 0%, #f0d774 100%)",
+            "transform": "translateY(-2px)",
+            "boxShadow": "0 6px 16px rgba(212, 175, 55, 0.4)"
+          }
+        },
+        "secondary": {
+          "background": "transparent",
+          "color": "#ffffff",
+          "padding": "14px 32px",
+          "borderRadius": "12px",
+          "fontSize": "15px",
+          "fontWeight": "600",
+          "border": "2px solid rgba(255, 255, 255, 0.3)",
+          "transition": "all 0.3s ease",
+          "hover": {
+            "background": "rgba(255, 255, 255, 0.1)",
+            "borderColor": "rgba(255, 255, 255, 0.6)"
+          }
+        },
+        "ghost": {
+          "background": "transparent",
+          "color": "#2d5f4f",
+          "padding": "12px 24px",
+          "borderRadius": "10px",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "border": "none",
+          "hover": {
+            "background": "rgba(45, 95, 79, 0.08)"
+          }
+        },
+        "icon": {
+          "background": "rgba(255, 255, 255, 0.1)",
+          "color": "#ffffff",
+          "width": "40px",
+          "height": "40px",
+          "borderRadius": "50%",
+          "border": "none",
+          "transition": "all 0.3s ease",
+          "hover": {
+            "background": "rgba(255, 255, 255, 0.2)",
+            "transform": "scale(1.1)"
+          }
+        }
+      },
+
+      "inputs": {
+        "textField": {
+          "background": "#ffffff",
+          "border": "2px solid rgba(45, 95, 79, 0.2)",
+          "borderRadius": "12px",
+          "padding": "14px 16px",
+          "fontSize": "15px",
+          "transition": "all 0.3s ease",
+          "focus": {
+            "borderColor": "#3d7563",
+            "boxShadow": "0 0 0 4px rgba(45, 95, 79, 0.1)"
+          }
+        },
+        "searchBar": {
+          "background": "rgba(255, 255, 255, 0.95)",
+          "border": "2px solid transparent",
+          "borderRadius": "16px",
+          "padding": "16px 20px 16px 48px",
+          "fontSize": "15px",
+          "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.1)",
+          "iconPosition": "left: 16px",
+          "iconColor": "#666666"
+        },
+        "textarea": {
+          "extends": "textField",
+          "minHeight": "120px",
+          "resize": "vertical"
+        }
+      },
+
+      "badges": {
+        "default": {
+          "background": "#f7d794",
+          "color": "#3d2e27",
+          "padding": "6px 14px",
+          "borderRadius": "8px",
+          "fontSize": "13px",
+          "fontWeight": "600",
+          "display": "inline-block"
+        },
+        "new": {
+          "background": "linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%)",
+          "color": "#ffffff",
+          "padding": "4px 10px",
+          "borderRadius": "6px",
+          "fontSize": "12px",
+          "fontWeight": "600"
+        },
+        "category": {
+          "background": "rgba(45, 95, 79, 0.1)",
+          "color": "#2d5f4f",
+          "padding": "6px 12px",
+          "borderRadius": "8px",
+          "fontSize": "13px",
+          "fontWeight": "500"
+        }
+      },
+
+      "carousel": {
+        "container": {
+          "padding": "32px 0",
+          "overflow": "hidden"
+        },
+        "navigation": {
+          "background": "rgba(255, 255, 255, 0.9)",
+          "color": "#2d5f4f",
+          "width": "48px",
+          "height": "48px",
+          "borderRadius": "50%",
+          "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.15)",
+          "hover": {
+            "background": "#ffffff",
+            "transform": "scale(1.1)"
+          }
+        },
+        "indicators": {
+          "width": "8px",
+          "height": "8px",
+          "borderRadius": "50%",
+          "background": "rgba(255, 255, 255, 0.4)",
+          "active": {
+            "background": "#ffffff",
+            "width": "24px",
+            "borderRadius": "4px"
+          }
+        }
+      },
+
+      "grid": {
+        "bookGrid": {
+          "display": "grid",
+          "gridTemplateColumns": "repeat(auto-fill, minmax(180px, 1fr))",
+          "gap": "24px",
+          "padding": "32px 0"
+        },
+        "cardGrid": {
+          "display": "grid",
+          "gridTemplateColumns": "repeat(auto-fit, minmax(320px, 1fr))",
+          "gap": "32px",
+          "padding": "32px 0"
+        }
+      },
+
+      "footer": {
+        "background": "linear-gradient(180deg, #1a3d32 0%, #0f2419 100%)",
+        "color": "rgba(255, 255, 255, 0.8)",
+        "padding": "64px 32px 32px",
+        "borderRadius": "32px 32px 0 0",
+        "linkColor": "rgba(255, 255, 255, 0.7)",
+        "linkHoverColor": "#ffffff",
+        "headingColor": "#ffffff",
+        "dividerColor": "rgba(255, 255, 255, 0.1)"
+      },
+
+      "tabs": {
+        "container": {
+          "borderBottom": "2px solid rgba(0, 0, 0, 0.1)",
+          "gap": "4px"
+        },
+        "tab": {
+          "padding": "12px 24px",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "color": "#666666",
+          "background": "transparent",
+          "border": "none",
+          "borderBottom": "2px solid transparent",
+          "transition": "all 0.3s ease",
+          "active": {
+            "color": "#2d5f4f",
+            "borderBottomColor": "#2d5f4f",
+            "fontWeight": "600"
+          },
+          "hover": {
+            "color": "#3d7563",
+            "background": "rgba(45, 95, 79, 0.05)"
+          }
+        }
+      },
+
+      "modal": {
+        "overlay": {
+          "background": "rgba(10, 10, 10, 0.6)",
+          "backdropFilter": "blur(4px)"
+        },
+        "container": {
+          "background": "#ffffff",
+          "borderRadius": "24px",
+          "padding": "32px",
+          "maxWidth": "600px",
+          "boxShadow": "0 16px 48px rgba(0, 0, 0, 0.3)"
+        }
+      },
+
+      "toast": {
+        "success": {
+          "background": "#52c41a",
+          "color": "#ffffff",
+          "borderRadius": "12px",
+          "padding": "16px 20px",
+          "boxShadow": "0 4px 12px rgba(82, 196, 26, 0.3)"
+        },
+        "error": {
+          "background": "#f5222d",
+          "color": "#ffffff",
+          "borderRadius": "12px",
+          "padding": "16px 20px",
+          "boxShadow": "0 4px 12px rgba(245, 34, 45, 0.3)"
+        },
+        "info": {
+          "background": "#1890ff",
+          "color": "#ffffff",
+          "borderRadius": "12px",
+          "padding": "16px 20px",
+          "boxShadow": "0 4px 12px rgba(24, 144, 255, 0.3)"
+        }
+      },
+
+      "bookshelf": {
+        "background": "linear-gradient(135deg, #6b5850 0%, #4a3730 100%)",
+        "shelf": {
+          "height": "32px",
+          "background": "linear-gradient(180deg, #8b7366 0%, #6b5850 100%)",
+          "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.2)",
+          "borderRadius": "2px"
+        },
+        "bookSpine": {
+          "boxShadow": "inset -2px 0 4px rgba(0, 0, 0, 0.2), inset 2px 0 4px rgba(255, 255, 255, 0.1)"
+        }
+      }
+    },
+
+    "animations": {
+      "transitions": {
+        "fast": "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "normal": "300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "slow": "500ms cubic-bezier(0.4, 0, 0.2, 1)"
+      },
+      "easing": {
+        "default": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "in": "cubic-bezier(0.4, 0, 1, 1)",
+        "out": "cubic-bezier(0, 0, 0.2, 1)",
+        "bounce": "cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+      },
+      "hover": {
+        "lift": "translateY(-4px)",
+        "scale": "scale(1.05)",
+        "glow": "0 8px 24px rgba(45, 95, 79, 0.3)"
+      },
+      "entrance": {
+        "fadeIn": "opacity 0.5s ease-in",
+        "slideUp": "transform 0.5s ease-out, opacity 0.5s ease-in"
+      }
+    },
+
+    "backgrounds": {
+      "patterns": {
+        "subtle": {
+          "type": "noise",
+          "opacity": "0.03",
+          "description": "Subtle texture overlay for depth"
+        },
+        "geometric": {
+          "type": "abstract shapes",
+          "opacity": "0.05",
+          "description": "Light geometric patterns for hero sections"
+        }
+      },
+      "gradients": {
+        "primary": "linear-gradient(135deg, #2d5f4f 0%, #3d7563 50%, #1a3d32 100%)",
+        "secondary": "linear-gradient(135deg, rgba(77, 61, 53, 0.95) 0%, rgba(61, 46, 39, 1) 100%)",
+        "accent": "linear-gradient(135deg, #d4af37 0%, #e6c758 100%)",
+        "overlay": "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%)"
+      }
+    },
+
+    "illustrations": {
+      "style": {
+        "type": "Flat illustration with depth",
+        "colors": "Match primary palette with vibrant accents",
+        "elements": "Books, abstract shapes, celestial elements (stars, planets)",
+        "composition": "Playful, whimsical, celebratory",
+        "characteristics": "Rounded shapes, layered elements, rich colors"
+      },
+      "bookCovers": {
+        "style": "Varied contemporary book cover designs",
+        "themes": "Mix of photographic, illustrative, and typographic",
+        "colors": "Full spectrum with emphasis on teals, corals, browns, and creams"
+      }
+    },
+
+    "responsiveness": {
+      "breakpoints": {
+        "mobile": "0-767px",
+        "tablet": "768-1023px",
+        "desktop": "1024-1439px",
+        "wide": "1440px+"
+      },
+      "behavior": {
+        "mobile": {
+          "navigation": "Hamburger menu",
+          "grid": "Single column for books, stack cards",
+          "padding": "16px",
+          "fontSize": "Slightly reduced"
+        },
+        "tablet": {
+          "grid": "2-3 columns for books",
+          "padding": "24px"
+        },
+        "desktop": {
+          "grid": "4-6 columns for books",
+          "padding": "32px",
+          "maxWidth": "1280px"
+        }
+      }
+    },
+
+    "accessibility": {
+      "contrast": {
+        "minimum": "WCAG AA (4.5:1 for normal text, 3:1 for large text)",
+        "target": "WCAG AAA where possible"
+      },
+      "focusStates": {
+        "outline": "2px solid #3d7563",
+        "outlineOffset": "2px",
+        "borderRadius": "4px"
+      },
+      "rtlSupport": {
+        "direction": "RTL throughout",
+        "textAlign": "right for body text",
+        "iconPlacement": "Mirror horizontally for directional icons"
+      }
+    },
+
+    "imageGuidelines": {
+      "bookCovers": {
+        "aspectRatio": "2:3 (portrait)",
+        "minResolution": "400x600px",
+        "format": "WebP with JPEG fallback",
+        "loading": "Lazy load with blur-up placeholder"
+      },
+      "heroImages": {
+        "aspectRatio": "16:9 or wider",
+        "minResolution": "1920x1080px",
+        "overlay": "Dark gradient overlay for text readability"
+      },
+      "thumbnails": {
+        "size": "180x270px for book cards",
+        "optimization": "Aggressive compression, WebP format"
+      }
+    },
+
+    "contentGuidelines": {
+      "language": "Persian/Arabic (RTL)",
+      "tone": "Professional, educational, welcoming",
+      "headingStyle": "Clear, descriptive, action-oriented",
+      "bodyStyle": "Concise, readable, well-structured with proper line height"
+    }
+  }
+}

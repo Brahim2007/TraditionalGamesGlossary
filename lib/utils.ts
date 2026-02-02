@@ -1,0 +1,126 @@
+// Utility functions for Traditional Games Glossary
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+/**
+ * Merge Tailwind CSS classes with clsx
+ * Handles RTL-aware class merging
+ */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+/**
+ * Create URL-safe slug from Arabic text
+ */
+export function createSlug(text: string): string {
+  return text
+    .replace(/[^\u0600-\u06FF\s]/g, '') // Keep Arabic letters and spaces
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .trim()
+}
+
+/**
+ * Normalize country names to official Arabic format
+ */
+export function normalizeCountryName(name: string): string {
+  const countryMap: Record<string, string> = {
+    'قطر': 'دولة قطر',
+    'السعودية': 'المملكة العربية السعودية',
+    'الإمارات': 'الإمارات العربية المتحدة',
+    'الامارات': 'الإمارات العربية المتحدة',
+    'الكويت': 'دولة الكويت',
+    'عمان': 'سلطنة عمان',
+    'عُمان': 'سلطنة عمان',
+    'البحرين': 'مملكة البحرين',
+    'الأردن': 'المملكة الأردنية الهاشمية',
+    'الاردن': 'المملكة الأردنية الهاشمية',
+    'مصر': 'جمهورية مصر العربية',
+    'اليمن': 'الجمهورية اليمنية',
+    'العراق': 'جمهورية العراق',
+    'تونس': 'الجمهورية التونسية',
+    'الجزائر': 'الجمهورية الجزائرية',
+    'المغرب': 'المملكة المغربية',
+    'السودان': 'جمهورية السودان',
+    'ليبيا': 'دولة ليبيا',
+    'فلسطين': 'دولة فلسطين',
+    'لبنان': 'الجمهورية اللبنانية',
+    'سوريا': 'الجمهورية العربية السورية',
+    'موريتانيا': 'الجمهورية الإسلامية الموريتانية',
+    'جيبوتي': 'جمهورية جيبوتي',
+    'الصومال': 'جمهورية الصومال',
+    'جزر القمر': 'جزر القمر',
+    'القمر': 'جزر القمر',
+  }
+
+  const matchedKey = Object.keys(countryMap).find((k) => name.includes(k))
+  return matchedKey ? countryMap[matchedKey] : name
+}
+
+/**
+ * Parse rules from text to atomic array
+ */
+export function parseRulesToArray(text: string): string[] {
+  const lines = text.split(/[\n\r]+/)
+  return lines
+    .filter((line) => line.trim().length > 0)
+    .map((line) => line.replace(/^(\d+[\.\-\)\s]+|[•\-\*])\s*/, '').trim())
+}
+
+/**
+ * Format date in Arabic
+ */
+export function formatArabicDate(date: Date): string {
+  return new Intl.DateTimeFormat('ar-SA', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date)
+}
+
+/**
+ * Format relative time in Arabic
+ */
+export function formatRelativeTime(date: Date): string {
+  const now = new Date()
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+  if (diffInSeconds < 60) {
+    return 'منذ لحظات'
+  }
+
+  if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60)
+    return `منذ ${minutes} ${minutes === 1 ? 'دقيقة' : 'دقائق'}`
+  }
+
+  if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600)
+    return `منذ ${hours} ${hours === 1 ? 'ساعة' : 'ساعات'}`
+  }
+
+  const days = Math.floor(diffInSeconds / 86400)
+  if (days === 1) {
+    return 'أمس'
+  }
+  if (days < 7) {
+    return `منذ ${days} أيام`
+  }
+
+  return formatArabicDate(date)
+}
+
+/**
+ * Truncate text with ellipsis
+ */
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength).trim() + '...'
+}
+
+/**
+ * Generate a random ID
+ */
+export function generateId(): string {
+  return Math.random().toString(36).substring(2, 15)
+}

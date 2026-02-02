@@ -1,0 +1,474 @@
+// Traditional Games Glossary - Prisma Schema
+// UNESCO-grade digital archive for Arab traditional games
+// Arabic UI, English code comments
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== CORE ENTITIES ====================
+
+model Game {
+  id            String   @id @default(cuid())
+  canonicalName String   @db.Text
+  englishName   String?  @db.Text // English translation of game name
+  localNames    String[] // Array of alternative Arabic names
+  slug          String   @unique
+
+  // Geographic metadata
+  countryId      String
+  country        Country @relation(fields: [countryId], references: [id])
+  region         String? @db.Text
+  geoCoordinates Json? // { lat: number, lng: number } or { x: number, y: number }
+
+  // Heritage classification
+  heritageFieldId String
+  heritageField   HeritageField @relation(fields: [heritageFieldId], references: [id])
+
+  // Game characteristics
+  gameType             String // حركية، ذهنية، طريفة، بحرية، شعبية
+  ageGroup             String? @db.Text
+  ageGroupDetails      String? @db.Text // وصف الفئة العمرية
+  practitioners        String? // مختلط، ذكور، إناث
+  practitionersDetails String? @db.Text // وصف الممارسين
+  playersCount         String?
+  playersDetails       String? @db.Text // وصف اللاعبين
+
+  // Environment and tools
+  tools       String[]
+  environment String?  @db.Text
+  timing      String?  @db.Text
+
+  // Descriptive content (semantically separated as per archival requirements)
+  description       String   @db.Text
+  rules             String[] // Atomic rules as array (not paragraphs)
+  winLossSystem     String?  @db.Text
+  startEndMechanism String?  @db.Text
+  oralTradition     String?  @db.Text
+  socialContext     String?  @db.Text
+
+  // Media and references
+  media      Media[]
+  references Reference[]
+
+  // Categorization
+  tags GameTag[]
+
+  // Concept relationship (للربط بالمفهوم الثقافي المجرد)
+  conceptId String?
+  concept   GameConcept? @relation("ConceptGames", fields: [conceptId], references: [id])
+
+  // Similarity relationships (علاقات التشابه)
+  similaritiesAsA GameSimilarity[] @relation("SimilarityGameA")
+  similaritiesAsB GameSimilarity[] @relation("SimilarityGameB")
+
+  // Workflow and audit
+  reviewStatus ReviewStatus @default(draft)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  publishedAt  DateTime?
+
+  contributorId String?
+  contributor   Contributor? @relation("contributorGames", fields: [contributorId], references: [id])
+
+  reviewerId  String?
+  reviewer    Contributor? @relation("reviewerGames", fields: [reviewerId], references: [id])
+  reviewNotes String?      @db.Text
+
+  // Review history
+  reviewLogs ReviewLog[]
+  // Note: For PostgreSQL full-text search, use raw SQL in migrations:
+  // CREATE INDEX games_search_idx ON "Game" USING GIN (to_tsvector('arabic', "canonicalName" || ' ' || "description"));
+
+  // Indexes for performance
+  @@index([reviewStatus])
+  @@index([countryId])
+  @@index([heritageFieldId])
+  @@index([createdAt])
+  @@index([publishedAt])
+  @@index([slug])
+  @@index([conceptId])
+}
+
+// ==================== GAME CONCEPTS & SIMILARITY ====================
+
+// المفهوم الثقافي المجرد - يجمع المتغيرات الإقليمية للعبة واحدة
+// Abstract cultural concept grouping regional variants of the same game
+model GameConcept {
+  id              String  @id @default(cuid())
+  name            String  @db.Text // الاسم المفاهيمي (مثل: ألعاب المنقلة)
+  description     String? @db.Text // وصف المفهوم الثقافي
+  canonicalGameId String? // اللعبة التمثيلية الأساسية (اختياري)
+
+  // العلاقات
+  games        Game[]           @relation("ConceptGames")
+  similarities GameSimilarity[]
+
+  // التدقيق
+  createdById String?
+  createdBy   Contributor? @relation("ConceptCreator", fields: [createdById], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([canonicalGameId])
+  @@index([createdAt])
+  @@index([createdById])
+}
+
+// جدول التشابه بين الألعاب - يخزن نتائج المقارنة
+// Similarity scores between game variants for curator review
+model GameSimilarity {
+  id String @id @default(cuid())
+
+  // اللعبتان المُقارَنتان (مرتبة: gameAId < gameBId أبجدياً للتفرد)
+  gameAId String
+  gameA   Game   @relation("SimilarityGameA", fields: [gameAId], references: [id], onDelete: Cascade)
+  gameBId String
+  gameB   Game   @relation("SimilarityGameB", fields: [gameBId], references: [id], onDelete: Cascade)
+
+  // النتيجة الإجمالية (0.0 - 1.0)
+  overallScore Float
+
+  // النتائج الجزئية للشفافية والتفسير
+  structuralScore Float? // البنية: اللاعبون، الأدوات، البيئة، الآليات
+  semanticScore   Float? // الدلالة: الكلمات المفتاحية من الوصف والقواعد
+  heritageScore   Float? // التصنيف التراثي
+  aiScore         Float? // نتيجة الذكاء الاصطناعي (اختياري)
+
+  // بيانات الحساب
+  calculatedAt DateTime @default(now())
+  algorithm    String   @default("rule-based-v1")
+  isAiAssisted Boolean  @default(false)
+
+  // سير عمل المُراجع
+  status       SimilarityStatus @default(pending)
+  curatorId    String?
+  curator      Contributor?     @relation("SimilarityCurator", fields: [curatorId], references: [id])
+  curatorNotes String?          @db.Text
+  reviewedAt   DateTime?
+
+  // الربط بالمفهوم عند القبول
+  conceptId String?
+  concept   GameConcept? @relation(fields: [conceptId], references: [id])
+
+  // شرح التشابه للمُراجع (JSON مفصل)
+  explanation Json?
+
+  @@unique([gameAId, gameBId])
+  @@index([overallScore])
+  @@index([status])
+  @@index([gameAId])
+  @@index([gameBId])
+  @@index([conceptId])
+  @@index([calculatedAt])
+  @@index([curatorId])
+}
+
+// ==================== SUPPORTING ENTITIES ====================
+
+model Country {
+  id           String        @id @default(cuid())
+  name         String        @unique // Official Arabic name (دولة قطر، المملكة العربية السعودية)
+  isoCode      String?       @unique
+  region       String? // الخليج، المغرب العربي، بلاد الشام، وادي النيل
+  description  String?       @db.Text
+  games        Game[]
+  contributors Contributor[]
+
+  @@index([region])
+}
+
+model HeritageField {
+  id          String  @id @default(cuid())
+  name        String  @unique // UNESCO-aligned classification in Arabic
+  description String? @db.Text
+  category    String? // Main UNESCO category
+  games       Game[]
+
+  @@index([category])
+}
+
+model Tag {
+  id          String    @id @default(cuid())
+  name        String    @unique // Arabic tag name
+  description String?   @db.Text
+  category    String? // تراثي، جغرافي، نوعي، ديموغرافي
+  games       GameTag[]
+
+  @@index([category])
+}
+
+// Category model for homepage browsing
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique // Arabic category name (e.g., ألعاب حركية)
+  slug        String   @unique // URL-friendly slug
+  description String?  @db.Text
+  icon        String   @default("LayoutGrid") // Lucide icon name
+  order       Int      @default(0) // Display order
+  isActive    Boolean  @default(true) // Can be hidden without deletion
+  color       String?  // Optional color for UI customization
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+  @@index([isActive])
+}
+
+// Game suggestions from public users
+model GameSuggestion {
+  id              String              @id @default(cuid())
+  gameName        String              @db.Text // اسم اللعبة المقترحة
+  description     String              @db.Text // وصف اللعبة
+  country         String?             // الدولة/المنطقة
+  submitterName   String              @db.Text // اسم المقترح
+  submitterEmail  String?             // بريد المقترح (اختياري)
+  additionalInfo  String?             @db.Text // معلومات إضافية
+  status          SuggestionStatus    @default(pending) // حالة المقترح
+  reviewNotes     String?             @db.Text // ملاحظات المراجع
+  reviewedById    String?
+  reviewedBy      Contributor?        @relation(fields: [reviewedById], references: [id])
+  reviewedAt      DateTime?
+  createdAt       DateTime            @default(now())
+  
+  @@index([status])
+  @@index([createdAt])
+  @@index([reviewedById])
+}
+
+// Junction table for Game-Tag many-to-many
+model GameTag {
+  id     String @id @default(cuid())
+  gameId String
+  tagId  String
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, tagId])
+  @@index([tagId])
+}
+
+model Media {
+  id        String    @id @default(cuid())
+  gameId    String
+  game      Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String?   @db.Text
+  source    String?   @db.Text
+  type      MediaType @default(image)
+  width     Int?
+  height    Int?
+  fileSize  Int? // in bytes
+  mimeType  String?
+  createdAt DateTime  @default(now())
+
+  @@index([gameId])
+  @@index([type])
+}
+
+model Reference {
+  id         String    @id @default(cuid())
+  gameId     String
+  game       Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  citation   String    @db.Text // Full citation in Arabic
+  sourceType String? // كتاب، دراسة أكاديمية، رواية شفوية، موقع إلكتروني
+  author     String?
+  year       Int?
+  publisher  String?
+  url        String?
+  accessedAt DateTime?
+
+  @@index([gameId])
+  @@index([sourceType])
+  @@index([author])
+}
+
+model Contributor {
+  id          String          @id @default(cuid())
+  name        String
+  email       String          @unique
+  role        ContributorRole @default(editor)
+  avatarUrl   String?
+  bio         String?         @db.Text
+  institution String?
+  countryId   String?
+  country     Country?        @relation(fields: [countryId], references: [id])
+
+  // Auth fields
+  passwordHash  String?   @db.Text
+  sessions      Session[]
+  emailVerified DateTime?
+  resetToken    String?   @db.Text
+  resetTokenExp DateTime?
+
+  // Relationships
+  gamesAdded          Game[]           @relation("contributorGames")
+  gamesReviewed       Game[]           @relation("reviewerGames")
+  reviewLogs          ReviewLog[]
+  systemLogs          SystemLog[]
+  createdConcepts     GameConcept[]    @relation("ConceptCreator")
+  curatedSimilarities GameSimilarity[] @relation("SimilarityCurator")
+  updatedSettings     Settings[]
+  reviewedSuggestions GameSuggestion[]
+
+  createdAt  DateTime  @default(now())
+  lastActive DateTime?
+
+  @@index([role])
+  @@index([countryId])
+  @@index([createdAt])
+}
+
+// جلسات المستخدمين للمصادقة
+// User sessions for authentication
+model Session {
+  id            String      @id @default(cuid())
+  contributorId String
+  contributor   Contributor @relation(fields: [contributorId], references: [id], onDelete: Cascade)
+  token         String      @unique @db.Text
+  expiresAt     DateTime
+  createdAt     DateTime    @default(now())
+  ipAddress     String?
+  userAgent     String?
+
+  @@index([contributorId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+model ReviewLog {
+  id         String       @id @default(cuid())
+  gameId     String
+  game       Game         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  reviewerId String
+  reviewer   Contributor  @relation(fields: [reviewerId], references: [id])
+  action     ReviewAction
+  notes      String?      @db.Text
+  changes    Json? // JSON diff of changes made
+  createdAt  DateTime     @default(now())
+
+  @@index([gameId])
+  @@index([reviewerId])
+  @@index([createdAt])
+  @@index([action])
+}
+
+model SystemLog {
+  id         String       @id @default(cuid())
+  action     String
+  entityType String? // "Game", "Media", "Reference", etc.
+  entityId   String?
+  userId     String?
+  user       Contributor? @relation(fields: [userId], references: [id])
+  details    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime     @default(now())
+
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
+  @@index([userId])
+}
+
+// إعدادات النظام - System Settings
+model Settings {
+  id        String   @id @default(cuid())
+  key       String   @unique // مفتاح الإعداد (مثل: hero_video_url)
+  value     String   @db.Text // قيمة الإعداد
+  category  String? // تصنيف الإعداد (مثل: homepage, general, media)
+  label     String? // تسمية الإعداد بالعربية
+  description String? @db.Text // وصف الإعداد
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+  updater   Contributor? @relation(fields: [updatedBy], references: [id])
+
+  @@index([category])
+  @@index([key])
+}
+
+// ==================== ENUMS ====================
+
+enum ReviewStatus {
+  draft // مسودة
+  under_review // قيد المراجعة
+  published // منشور
+  rejected // مرفوض
+  archived // مؤرشف (for historical preservation)
+}
+
+enum MediaType {
+  image // صورة
+  video // فيديو
+  audio // صوت
+  document // وثيقة
+}
+
+enum ContributorRole {
+  viewer // مستعرض
+  editor // محرر
+  reviewer // مراجع
+  admin // مدير
+}
+
+enum ReviewAction {
+  created // تم الإنشاء
+  updated // تم التحديث
+  submitted // تم الإرسال للمراجعة
+  approved // تم الموافقة
+  rejected // تم الرفض
+  published // تم النشر
+  archived // تم الأرشفة
+}
+
+enum SimilarityStatus {
+  pending // في انتظار المراجعة
+  accepted // مقبول (مرتبط بـ GameConcept)
+  rejected // مرفوض - ليس تطابقاً
+  postponed // مؤجل - يحتاج مزيداً من البحث
+}
+
+enum SuggestionStatus {
+  pending // قيد المراجعة
+  approved // موافق عليه
+  rejected // مرفوض
+  converted // تم تحويله إلى لعبة
+}
+
+// ==================== COMPOSITE TYPES ====================
+
+// Note: Prisma doesn't support custom composite types directly in PostgreSQL,
+// but we can use Json type for structured data when needed
+
+// Example of coordinate structure (used in Game.geoCoordinates)
+// type Coordinate {
+//   lat: Float
+//   lng: Float
+// }
+
+// Example of media metadata structure
+// type MediaMetadata {
+//   width: Int
+//   height: Int
+//   duration: Int?  // for video/audio
+//   format: String
+// }
+
+// ==================== DATABASE CONSTRAINTS ====================
+
+// Additional constraints would be added via raw SQL in migrations:
+// 1. CHECK constraints for data validation
+// 2. Triggers for audit logging
+// 3. Custom functions for Arabic text processing
+
+// Example of constraints that would be added:
+// - Game.slug must be URL-safe and unique
+// - Game.canonicalName cannot be empty
+// - Media.url must be valid URL
+// - Reference.citation cannot be empty
+// - Contributor.email must be valid email format
