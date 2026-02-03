@@ -28,7 +28,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { UploadButton } from '@/components/ui/upload-button'
 import { CloudinaryUploadButton } from '@/components/ui/cloudinary-upload-button'
-import { cn } from '@/lib/utils'
+import { cn, parseRulesToArray } from '@/lib/utils'
 import { ARAB_COUNTRIES } from '@/lib/constants/countries'
 import { validateGameData, getFieldError, clearFieldError, validateGameName, validateDescription, validateRules } from '@/lib/utils/validation'
 import { createGame } from '@/lib/actions/game'
@@ -449,7 +449,11 @@ export default function AddGamePage() {
             // إذا كان هذا حقل القواعد، ابدأ جمع القواعد
             if (currentKey === 'rules') {
               isCollectingRules = true
-              if (content) rulesBuffer.push(content)
+              if (content) {
+                // استخدام parseRulesToArray لتفكيك القواعد المفصولة بنقاط
+                const parsedRules = parseRulesToArray(content)
+                rulesBuffer.push(...parsedRules)
+              }
             } else {
               isCollectingRules = false
               mappedData[currentKey] = content
@@ -467,9 +471,13 @@ export default function AddGamePage() {
         const rulePattern = /^(\d+[\.\-\)\s]+|[•\-\*])\s*(.+)$/
         const match = trimmed.match(rulePattern)
         if (match) {
-          rulesBuffer.push(match[2]) // أضف فقط النص بدون الرقم/الرمز
+          // استخدام parseRulesToArray لتفكيك القواعد المتعددة
+          const parsedRules = parseRulesToArray(match[2])
+          rulesBuffer.push(...parsedRules)
         } else if (trimmed.length > 5) { // تجاهل الأسطر القصيرة جداً
-          rulesBuffer.push(trimmed) // أضف السطر كما هو
+          // استخدام parseRulesToArray لتفكيك القواعد المتعددة
+          const parsedRules = parseRulesToArray(trimmed)
+          rulesBuffer.push(...parsedRules)
         }
       }
       // إذا لم يكن هناك تطابق ولسنا نجمع القواعد

@@ -59,12 +59,30 @@ export function normalizeCountryName(name: string): string {
 
 /**
  * Parse rules from text to atomic array
+ * Supports multiple formats:
+ * - Lines separated by newlines
+ * - Sentences separated by period followed by Arabic letter (no space)
+ * - Numbered lists (1. 2. etc)
  */
 export function parseRulesToArray(text: string): string[] {
-  const lines = text.split(/[\n\r]+/)
+  // First, split by newlines
+  let lines = text.split(/[\n\r]+/)
+
+  // If we only got one line, try splitting by period followed by Arabic letter
+  // This handles cases like: "قاعدة أولى.قاعدة ثانية.قاعدة ثالثة"
+  if (lines.length === 1 && lines[0].length > 0) {
+    // Split on period followed directly by Arabic letter (no space between)
+    // Using positive lookahead to keep the Arabic letter with the next sentence
+    const splitByPeriod = lines[0].split(/\.(?=[\u0600-\u06FF])/)
+    if (splitByPeriod.length > 1) {
+      lines = splitByPeriod
+    }
+  }
+
   return lines
     .filter((line) => line.trim().length > 0)
     .map((line) => line.replace(/^(\d+[\.\-\)\s]+|[•\-\*])\s*/, '').trim())
+    .filter((line) => line.length > 0) // Remove empty lines after cleanup
 }
 
 /**
