@@ -233,7 +233,7 @@ export default async function GameDetailPage({ params }: PageProps) {
             )}
 
             {/* Description */}
-            <ContentCard icon={BookOpen} title="الوصف" iconColor="#2d5f4f">
+            <ContentCard icon={BookOpen} title="الوصف" subtitle="نبذة تعريفية عن اللعبة" iconColor="#2d5f4f">
               <p className="text-[#333333] leading-relaxed whitespace-pre-wrap text-lg">
                 {game.description}
               </p>
@@ -241,7 +241,7 @@ export default async function GameDetailPage({ params }: PageProps) {
 
             {/* Cultural Concept */}
             {game.concept && (
-              <ContentCard icon={Brain} title="المفهوم الثقافي" iconColor="#4a9d9c" highlight>
+              <ContentCard icon={Brain} title="المفهوم الثقافي" subtitle="الإطار الثقافي المجرد للعبة" iconColor="#4a9d9c" highlight>
                 <div className="bg-[#4a9d9c]/10 rounded-xl p-6 border border-[#4a9d9c]/20">
                   <div className="flex items-center gap-3 mb-3">
                     <Sparkles className="h-5 w-5 text-[#4a9d9c]" />
@@ -263,6 +263,7 @@ export default async function GameDetailPage({ params }: PageProps) {
               <ContentCard
                 icon={List}
                 title="قواعد اللعب"
+                subtitle="خطوات وآليات ممارسة اللعبة"
                 iconColor="#2d5f4f"
                 badge={`${game.rules.length} قاعدة`}
               >
@@ -284,21 +285,21 @@ export default async function GameDetailPage({ params }: PageProps) {
 
             {/* Win/Loss System */}
             {game.winLossSystem && (
-              <ContentCard icon={Trophy} title="نظام الفوز والخسارة" iconColor="#d4af37">
+              <ContentCard icon={Trophy} title="نظام الفوز والخسارة" subtitle="معايير تحديد الفائز والخاسر" iconColor="#d4af37">
                 <FormattedContent content={game.winLossSystem} type="win-loss" />
               </ContentCard>
             )}
 
             {/* Start/End Mechanism */}
             {game.startEndMechanism && (
-              <ContentCard icon={Award} title="آلية البدء والانتهاء" iconColor="#5a8f7b">
+              <ContentCard icon={Award} title="آلية البدء والانتهاء" subtitle="كيف تبدأ اللعبة وكيف تنتهي" iconColor="#5a8f7b">
                 <FormattedContent content={game.startEndMechanism} type="start-end" />
               </ContentCard>
             )}
 
             {/* Oral Tradition */}
             {game.oralTradition && (
-              <ContentCard icon={Volume2} title="الموروث الشفهي" iconColor="#ff6b6b">
+              <ContentCard icon={Volume2} title="الموروث الشفهي" subtitle="أهازيج وصيحات ومصطلحات اللعبة" iconColor="#ff6b6b">
                 <div className="bg-gradient-to-br from-[#ff6b6b]/10 to-[#f4a582]/10 rounded-xl p-6 border border-[#ff6b6b]/20">
                   <p className="text-[#333333] leading-relaxed whitespace-pre-wrap font-medium">
                     {game.oralTradition}
@@ -309,7 +310,7 @@ export default async function GameDetailPage({ params }: PageProps) {
 
             {/* Social Context */}
             {game.socialContext && (
-              <ContentCard icon={Heart} title="السياق الاجتماعي" iconColor="#f4a582">
+              <ContentCard icon={Heart} title="السياق الاجتماعي" subtitle="القيم والدلالات الاجتماعية" iconColor="#f4a582">
                 <FormattedContent content={game.socialContext} type="social-context" />
               </ContentCard>
             )}
@@ -382,6 +383,7 @@ export default async function GameDetailPage({ params }: PageProps) {
               <ContentCard
                 icon={Book}
                 title="المراجع"
+                subtitle="المصادر والمراجع الموثقة"
                 iconColor="#6b5850"
                 badge={`${references.length} مصدر`}
               >
@@ -541,6 +543,7 @@ export default async function GameDetailPage({ params }: PageProps) {
 function ContentCard({
   icon: Icon,
   title,
+  subtitle,
   badge,
   iconColor,
   highlight,
@@ -548,6 +551,7 @@ function ContentCard({
 }: {
   icon: any
   title: string
+  subtitle?: string
   badge?: string
   iconColor: string
   highlight?: boolean
@@ -563,7 +567,10 @@ function ContentCard({
           >
             <Icon className="h-5 w-5 text-white" />
           </div>
-          <h2 className="text-lg font-bold text-[#1a3d32]">{title}</h2>
+          <div>
+            <h2 className="text-lg font-bold text-[#1a3d32]">{title}</h2>
+            {subtitle && <p className="text-xs text-[#666666]">{subtitle}</p>}
+          </div>
         </div>
         {badge && (
           <span className="text-xs font-semibold text-[#666666] bg-[#e0e0e0] px-3 py-1.5 rounded-lg">
