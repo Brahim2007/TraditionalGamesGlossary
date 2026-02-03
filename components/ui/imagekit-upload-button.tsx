@@ -75,9 +75,10 @@ export function ImageKitUploadButton({
         })
 
         if (result.url) {
-          setUploadedFiles(prev => [...prev, result.url])
+          const imageUrl = result.url as string
+          setUploadedFiles(prev => [...prev, imageUrl])
           if (onUploadComplete) {
-            onUploadComplete(result.url)
+            onUploadComplete(imageUrl)
           }
         }
       }
