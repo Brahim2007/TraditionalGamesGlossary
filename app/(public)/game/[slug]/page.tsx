@@ -26,6 +26,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { FormattedContent } from '@/components/ui/formatted-content'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -284,18 +285,14 @@ export default async function GameDetailPage({ params }: PageProps) {
             {/* Win/Loss System */}
             {game.winLossSystem && (
               <ContentCard icon={Trophy} title="نظام الفوز والخسارة" iconColor="#d4af37">
-                <p className="text-[#333333] leading-relaxed whitespace-pre-wrap">
-                  {game.winLossSystem}
-                </p>
+                <FormattedContent content={game.winLossSystem} type="win-loss" />
               </ContentCard>
             )}
 
             {/* Start/End Mechanism */}
             {game.startEndMechanism && (
               <ContentCard icon={Award} title="آلية البدء والانتهاء" iconColor="#5a8f7b">
-                <p className="text-[#333333] leading-relaxed whitespace-pre-wrap">
-                  {game.startEndMechanism}
-                </p>
+                <FormattedContent content={game.startEndMechanism} type="start-end" />
               </ContentCard>
             )}
 
@@ -313,9 +310,7 @@ export default async function GameDetailPage({ params }: PageProps) {
             {/* Social Context */}
             {game.socialContext && (
               <ContentCard icon={Heart} title="السياق الاجتماعي" iconColor="#f4a582">
-                <p className="text-[#333333] leading-relaxed whitespace-pre-wrap">
-                  {game.socialContext}
-                </p>
+                <FormattedContent content={game.socialContext} type="social-context" />
               </ContentCard>
             )}
 
