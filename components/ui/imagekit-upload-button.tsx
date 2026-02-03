@@ -55,9 +55,9 @@ export function ImageKitUploadButton({
           throw new Error('نوع الملف غير مدعوم. الأنواع المدعومة: JPG, PNG, GIF, WebP')
         }
 
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-          throw new Error('حجم الملف يتجاوز 5MB')
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          throw new Error('حجم الملف يتجاوز 10MB')
         }
 
         // Get authentication params

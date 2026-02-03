@@ -574,41 +574,29 @@ export async function deleteGame(gameId: string) {
     const game = await db.game.findUnique({
       where: { id: gameId }
     })
-    
+
     if (!game) {
       throw new Error('اللعبة غير موجودة')
     }
 
-    // Soft delete by archiving (preserve data for historical records)
-    await db.game.update({
-      where: { id: gameId },
-      data: {
-        reviewStatus: ReviewStatus.archived
-      }
-    })
-
-    // Create review log
-    await db.reviewLog.create({
-      data: {
-        gameId,
-        reviewerId: user.id,
-        action: 'archived',
-        notes: 'تم أرشفة اللعبة'
-      }
+    // حذف اللعبة بالكامل من قاعدة البيانات
+    // السجلات المرتبطة ستُحذف تلقائياً بسبب onDelete: Cascade في schema
+    await db.game.delete({
+      where: { id: gameId }
     })
 
     revalidatePath('/dashboard/games')
     revalidatePath('/gallery')
-    
+
     return {
       success: true,
-      message: 'تم أرشفة اللعبة بنجاح'
+      message: 'تم حذف اللعبة بالكامل من قاعدة البيانات'
     }
   } catch (error) {
     console.error('Error deleting game:', error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'حدث خطأ أثناء أرشفة اللعبة'
+      message: error instanceof Error ? error.message : 'حدث خطأ أثناء حذف اللعبة'
     }
   }
 }
