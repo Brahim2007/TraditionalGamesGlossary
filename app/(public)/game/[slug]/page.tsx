@@ -113,54 +113,54 @@ export default async function GameDetailPage({ params }: PageProps) {
 
         <div className="relative mx-auto max-w-7xl px-6 py-10">
           {/* Breadcrumb */}
-          <nav className="mb-8 flex items-center gap-3 text-sm">
+          <nav className="mb-6 lg:mb-8 flex flex-wrap items-center gap-2 text-xs lg:text-sm">
             <Link
               href="/"
-              className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/10"
+              className="flex items-center gap-1 text-white/70 hover:text-white transition-colors px-2 py-1 lg:px-3 lg:py-1.5 rounded-lg hover:bg-white/10"
             >
-              <HomeIcon className="h-4 w-4" />
-              <span>الرئيسية</span>
+              <HomeIcon className="h-3 w-3 lg:h-4 lg:w-4" />
+              <span className="hidden xs:inline">الرئيسية</span>
             </Link>
-            <ArrowRight className="h-4 w-4 rotate-180 text-white/30" />
+            <ArrowRight className="h-3 w-3 lg:h-4 lg:w-4 rotate-180 text-white/30 flex-shrink-0" />
             <Link
               href="/gallery"
-              className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/10"
+              className="flex items-center gap-1 text-white/70 hover:text-white transition-colors px-2 py-1 lg:px-3 lg:py-1.5 rounded-lg hover:bg-white/10"
             >
-              <Book className="h-4 w-4" />
-              <span>المعرض</span>
+              <Book className="h-3 w-3 lg:h-4 lg:w-4" />
+              <span className="hidden xs:inline">المعرض</span>
             </Link>
-            <ArrowRight className="h-4 w-4 rotate-180 text-white/30" />
-            <span className="text-white font-medium bg-white/10 px-4 py-1.5 rounded-lg">
+            <ArrowRight className="h-3 w-3 lg:h-4 lg:w-4 rotate-180 text-white/30 flex-shrink-0" />
+            <span className="text-white font-medium bg-white/10 px-3 py-1 lg:px-4 lg:py-1.5 rounded-lg truncate max-w-[200px] sm:max-w-none">
               {game.canonicalName}
             </span>
           </nav>
 
           {/* Game Title Section */}
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-8">
             <div className="flex-1">
               {/* Badges */}
-              <div className="flex flex-wrap items-center gap-3 mb-5">
-                <span className="bg-[#f7d794] text-[#3d2e27] text-sm font-semibold px-4 py-2 rounded-lg shadow-sm">
+              <div className="flex flex-wrap items-center gap-2 mb-4 lg:mb-5">
+                <span className="bg-[#f7d794] text-[#3d2e27] text-sm font-semibold px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg shadow-sm">
                   {heritageFieldName}
                 </span>
-                <span className="bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-4 py-2 rounded-lg border border-white/20">
+                <span className="bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg border border-white/20">
                   {game.gameType}
                 </span>
               </div>
 
               {/* Title */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 lg:mb-5 leading-tight">
                 {game.canonicalName}
               </h1>
 
               {/* Local Names */}
               {game.localNames && game.localNames.length > 0 && (
-                <div className="flex flex-wrap items-center gap-2 mb-5">
-                  <span className="text-white/60 text-sm">أسماء أخرى:</span>
+                <div className="flex flex-wrap items-center gap-1.5 mb-4 lg:mb-5">
+                  <span className="text-white/60 text-xs lg:text-sm">أسماء أخرى:</span>
                   {game.localNames.map((n: string) => (
                     <span
                       key={n}
-                      className="bg-white/10 text-white text-sm px-3 py-1 rounded-lg border border-white/10"
+                      className="bg-white/10 text-white text-xs lg:text-sm px-2 py-0.5 lg:px-3 lg:py-1 rounded-lg border border-white/10"
                     >
                       {n}
                     </span>
@@ -169,31 +169,31 @@ export default async function GameDetailPage({ params }: PageProps) {
               )}
 
               {/* Location */}
-              <div className="flex items-center gap-3 text-white/80">
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <MapPin className="h-4 w-4 text-[#d4af37]" />
-                  <span>{countryName}</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 text-white/80">
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg w-full sm:w-auto">
+                  <MapPin className="h-3.5 w-3.5 lg:h-4 lg:w-4 text-[#d4af37]" />
+                  <span className="text-sm lg:text-base">{countryName}</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <Globe className="h-4 w-4 text-[#d4af37]" />
-                  <span>{region}</span>
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg w-full sm:w-auto">
+                  <Globe className="h-3.5 w-3.5 lg:h-4 lg:w-4 text-[#d4af37]" />
+                  <span className="text-sm lg:text-base">{region}</span>
                 </div>
               </div>
             </div>
 
             {/* Quick Stats */}
-            <div className="flex gap-4">
+            <div className="flex flex-row sm:flex-col lg:flex-row gap-3 lg:gap-4 mt-4 lg:mt-0">
               {game.playersCount && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4 text-center border border-white/10 min-w-[100px]">
-                  <Users className="h-6 w-6 text-[#d4af37] mx-auto mb-2" />
-                  <div className="text-white font-bold text-lg">{game.playersCount}</div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl lg:rounded-2xl px-4 py-3 lg:px-6 lg:py-4 text-center border border-white/10 min-w-[80px] lg:min-w-[100px] flex-1 sm:flex-none">
+                  <Users className="h-5 w-5 lg:h-6 lg:w-6 text-[#d4af37] mx-auto mb-1 lg:mb-2" />
+                  <div className="text-white font-bold text-base lg:text-lg">{game.playersCount}</div>
                   <div className="text-white/60 text-xs">لاعب</div>
                 </div>
               )}
               {game.ageGroup && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4 text-center border border-white/10 min-w-[100px]">
-                  <Calendar className="h-6 w-6 text-[#d4af37] mx-auto mb-2" />
-                  <div className="text-white font-bold text-lg">{game.ageGroup}</div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl lg:rounded-2xl px-4 py-3 lg:px-6 lg:py-4 text-center border border-white/10 min-w-[80px] lg:min-w-[100px] flex-1 sm:flex-none">
+                  <Calendar className="h-5 w-5 lg:h-6 lg:w-6 text-[#d4af37] mx-auto mb-1 lg:mb-2" />
+                  <div className="text-white font-bold text-base lg:text-lg">{game.ageGroup}</div>
                   <div className="text-white/60 text-xs">العمر</div>
                 </div>
               )}
@@ -208,10 +208,10 @@ export default async function GameDetailPage({ params }: PageProps) {
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-6 py-10">
-        <div className="grid gap-8 lg:grid-cols-3">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 lg:py-10">
+        <div className="grid gap-6 lg:gap-8 lg:grid-cols-3">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 lg:space-y-6">
             {/* Game Image */}
             {primaryMedia && (
               <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-[#e0e0e0] hover:shadow-lg transition-shadow">
@@ -317,59 +317,59 @@ export default async function GameDetailPage({ params }: PageProps) {
 
             {/* Ethno-cognitive Archival Section */}
             {(game.ethnographicMeaning || game.linguisticOrigin || game.cognitiveComplexity || game.folkCognitiveFunction) && (
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-lg overflow-hidden border-2 border-amber-200">
-                <div className="p-5 bg-gradient-to-l from-amber-100/50 to-transparent border-b border-amber-200">
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl lg:rounded-2xl shadow-lg overflow-hidden border-2 border-amber-200">
+                <div className="p-4 lg:p-5 bg-gradient-to-l from-amber-100/50 to-transparent border-b border-amber-200">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-amber-600 to-orange-600 rounded-xl flex items-center justify-center shadow-md">
-                      <BookOpen className="h-5 w-5 text-white" />
+                    <div className="w-9 h-9 lg:w-11 lg:h-11 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg lg:rounded-xl flex items-center justify-center shadow-md">
+                      <BookOpen className="h-4 w-4 lg:h-5 lg:w-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-amber-900">الأرشفة الإثنو-معرفية</h3>
+                      <h3 className="font-bold text-amber-900 text-sm lg:text-base">الأرشفة الإثنو-معرفية</h3>
                       <p className="text-xs text-amber-700">توثيق أكاديمي وإثنوغرافي</p>
                     </div>
                   </div>
                 </div>
-                <div className="p-5 space-y-5">
+                <div className="p-4 lg:p-5 space-y-4 lg:space-y-5">
                   {game.ethnographicMeaning && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
-                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                      <h4 className="font-bold text-amber-900 text-xs lg:text-sm flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-amber-500 rounded-full"></span>
                         المعنى الإثنوغرافي للتسمية
                       </h4>
-                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-3 lg:p-4 rounded-lg lg:rounded-xl border border-amber-200 text-sm lg:text-base">
                         {game.ethnographicMeaning}
                       </p>
                     </div>
                   )}
                   {game.linguisticOrigin && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
-                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                      <h4 className="font-bold text-amber-900 text-xs lg:text-sm flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-amber-500 rounded-full"></span>
                         الأصل اللغوي للتسمية
                       </h4>
-                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-3 lg:p-4 rounded-lg lg:rounded-xl border border-amber-200 text-sm lg:text-base">
                         {game.linguisticOrigin}
                       </p>
                     </div>
                   )}
                   {game.cognitiveComplexity && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
-                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                      <h4 className="font-bold text-amber-900 text-xs lg:text-sm flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-amber-500 rounded-full"></span>
                         مستوى التعقيد المعرفي
                       </h4>
-                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-3 lg:p-4 rounded-lg lg:rounded-xl border border-amber-200 text-sm lg:text-base">
                         {game.cognitiveComplexity}
                       </p>
                     </div>
                   )}
                   {game.folkCognitiveFunction && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
-                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                      <h4 className="font-bold text-amber-900 text-xs lg:text-sm flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-amber-500 rounded-full"></span>
                         الوظيفة المعرفية الشعبية
                       </h4>
-                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-3 lg:p-4 rounded-lg lg:rounded-xl border border-amber-200 text-sm lg:text-base">
                         {game.folkCognitiveFunction}
                       </p>
                     </div>
@@ -558,27 +558,27 @@ function ContentCard({
   children: React.ReactNode
 }) {
   return (
-    <div className={`bg-white rounded-2xl shadow-md overflow-hidden border border-[#e0e0e0] hover:shadow-lg transition-all ${highlight ? 'ring-2 ring-[#4a9d9c]/20' : ''}`}>
-      <div className="flex items-center justify-between p-5 border-b border-[#e0e0e0] bg-[#faf9f5]">
-        <div className="flex items-center gap-3">
+    <div className={`bg-white rounded-xl lg:rounded-2xl shadow-md overflow-hidden border border-[#e0e0e0] hover:shadow-lg transition-all ${highlight ? 'ring-2 ring-[#4a9d9c]/20' : ''}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 lg:p-5 border-b border-[#e0e0e0] bg-[#faf9f5]">
+        <div className="flex items-center gap-3 mb-2 sm:mb-0">
           <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center shadow-md"
+            className="w-9 h-9 lg:w-11 lg:h-11 rounded-lg lg:rounded-xl flex items-center justify-center shadow-md"
             style={{ background: `linear-gradient(135deg, ${iconColor} 0%, ${iconColor}dd 100%)` }}
           >
-            <Icon className="h-5 w-5 text-white" />
+            <Icon className="h-4 w-4 lg:h-5 lg:w-5 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#1a3d32]">{title}</h2>
+            <h2 className="text-base lg:text-lg font-bold text-[#1a3d32]">{title}</h2>
             {subtitle && <p className="text-xs text-[#666666]">{subtitle}</p>}
           </div>
         </div>
         {badge && (
-          <span className="text-xs font-semibold text-[#666666] bg-[#e0e0e0] px-3 py-1.5 rounded-lg">
+          <span className="text-xs font-semibold text-[#666666] bg-[#e0e0e0] px-2 py-1 lg:px-3 lg:py-1.5 rounded-lg self-start sm:self-auto">
             {badge}
           </span>
         )}
       </div>
-      <div className="p-6">{children}</div>
+      <div className="p-4 lg:p-6">{children}</div>
     </div>
   )
 }
