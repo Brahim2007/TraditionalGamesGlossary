@@ -221,7 +221,8 @@ export async function createGame(formData: FormData) {
     socialContext: formData.get('socialContext') as string,
     tagIds: JSON.parse(formData.get('tagIds') as string || '[]'),
     uploadedImages: JSON.parse(formData.get('uploadedImages') as string || '[]'),
-    references: formData.get('references') as string || ''
+    references: formData.get('references') as string || '',
+    imageCaption: formData.get('imageCaption') as string || ''
   }
 
     console.log('Extracted raw data:', {
@@ -321,12 +322,15 @@ export async function createGame(formData: FormData) {
 
     // Create media records for uploaded images
     if (uploadedImages && uploadedImages.length > 0) {
+      // استخدام التسمية التوضيحية المقدمة من المستخدم أو إنشاء تسمية افتراضية
+      const userCaption = rawData.imageCaption?.trim()
+
       await db.media.createMany({
         data: uploadedImages.map((url, index) => ({
           gameId: game.id,
           url,
           type: 'image',
-          caption: `صورة ${index + 1} للعبة ${gameData.canonicalName}`
+          caption: userCaption || `صورة توضيحية للعبة ${gameData.canonicalName}`
         })),
         skipDuplicates: true
       })

@@ -793,6 +793,9 @@ export default function AddGamePage() {
       
       formDataToSend.set('uploadedImages', JSON.stringify(formData.uploadedImages))
 
+      // إرسال التسمية التوضيحية للصورة
+      formDataToSend.set('imageCaption', formData.imageCaption || '')
+
       // إرسال المراجع
       formDataToSend.set('references', formData.references || '')
 
