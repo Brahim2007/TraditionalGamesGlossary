@@ -4,8 +4,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'تسجيل الدخول | معجم الألعاب التراثية العربية',
-  description: 'تسجيل الدخول إلى لوحة تحكم معجم الألعاب التراثية العربية',
+  title: 'تسجيل الدخول | مسرد الألعاب التراثية العربية',
+  description: 'تسجيل الدخول إلى لوحة تحكم مسرد الألعاب التراثية العربية',
 }
 
 export default function AuthLayout({

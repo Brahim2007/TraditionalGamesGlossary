@@ -963,11 +963,6 @@ export default function TraditionalGamesGlossary() {
                         </div>
                         <p className="text-xs text-gray-400 mt-1">يفضل صور عالية الدقة توضح طريقة اللعب.</p>
                      </div>
-
-                     <div className="flex items-center gap-2 mt-6">
-                        <input type="checkbox" id="certify" className="w-4 h-4 text-[#061D14] rounded focus:ring-[#AB9F80]" />
-                        <label htmlFor="certify" className="text-sm text-gray-600">أقر بصحة البيانات المدخلة ومسؤوليتي عن دقة التوثيق.</label>
-                     </div>
                   </div>
                </FormSection>
             )}

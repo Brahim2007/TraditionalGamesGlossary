@@ -1672,16 +1672,6 @@ export default function AddGamePage() {
                      </p>
                    </div>
                  </div>
-                <div className="mt-6 flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="certify"
-                    className="h-4 w-4 rounded text-brand-deepest focus:ring-accent"
-                  />
-                  <label htmlFor="certify" className="text-sm text-gray-600">
-                    أقر بصحة البيانات المدخلة ومسؤوليتي عن دقة التوثيق.
-                  </label>
-                </div>
               </div>
             </FormSection>
           )}

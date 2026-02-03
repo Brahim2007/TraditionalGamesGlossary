@@ -99,7 +99,7 @@ export default async function SettingsPage() {
               <label className="block text-sm font-medium text-gray-700">
                 اسم النظام
               </label>
-              <Input defaultValue="معجم الألعاب التراثية العربية" />
+              <Input defaultValue="مسرد الألعاب التراثية العربية" />
             </div>
 
             <div className="space-y-2">

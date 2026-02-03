@@ -25,7 +25,7 @@ export default async function LoginPage() {
         </div>
 
         <CardTitle className="text-3xl font-bold text-brand-deepest mb-2">
-          معجم الألعاب التراثية
+          مسرد الألعاب التراثية
         </CardTitle>
         <p className="text-brand-light mt-2">
           سجّل دخولك للوصول إلى لوحة التحكم
