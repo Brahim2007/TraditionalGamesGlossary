@@ -142,3 +142,69 @@ export function truncateText(text: string, maxLength: number): string {
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 15)
 }
+
+/**
+ * Parse win/loss system text to formatted lines
+ * Splits "الفوز: ...الخسارة: ..." into separate lines
+ */
+export function parseWinLossSystem(text: string): string {
+  if (!text) return ''
+
+  // Split by الفوز/الخسارة patterns
+  let result = text
+    .replace(/\.(?=الفوز|الخسارة)/g, '.\n')
+    .replace(/(?<=[^.\n])(?=الفوز:|الخسارة:)/g, '\n')
+
+  return result.trim()
+}
+
+/**
+ * Parse start/end mechanism text to formatted lines
+ * Splits "البدء: ...الانتهاء: ..." into separate lines
+ */
+export function parseStartEndMechanism(text: string): string {
+  if (!text) return ''
+
+  // Split by البدء/الانتهاء patterns
+  let result = text
+    .replace(/\.(?=البدء|الانتهاء)/g, '.\n')
+    .replace(/(?<=[^.\n])(?=البدء:|الانتهاء:)/g, '\n')
+
+  return result.trim()
+}
+
+/**
+ * Parse social context to numbered lines
+ * Handles "1. ...2. ...3. ..." format
+ */
+export function parseSocialContext(text: string): string {
+  if (!text) return ''
+
+  // Remove quotes if present
+  let cleaned = text.replace(/^[""]|[""]$/g, '').trim()
+
+  // Split by number followed by period and Arabic text
+  let result = cleaned
+    .replace(/\.(?=\d+\.)/g, '.\n')
+    .replace(/(?<=[^.\n])(?=\d+\.\s)/g, '\n')
+
+  return result.trim()
+}
+
+/**
+ * Parse references to separate lines
+ * Handles numbered references like "1. ...2. ..."
+ */
+export function parseReferences(text: string): string {
+  if (!text) return ''
+
+  // Remove quotes if present
+  let cleaned = text.replace(/^[""]|[""]$/g, '').trim()
+
+  // Split by number followed by period
+  let result = cleaned
+    .replace(/\.(?=\d+\.)/g, '.\n')
+    .replace(/(?<=[^.\n])(?=\d+\.\s)/g, '\n')
+
+  return result.trim()
+}

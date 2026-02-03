@@ -28,7 +28,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { UploadButton } from '@/components/ui/upload-button'
 import { CloudinaryUploadButton } from '@/components/ui/cloudinary-upload-button'
-import { cn, parseRulesToArray } from '@/lib/utils'
+import { cn, parseRulesToArray, parseWinLossSystem, parseStartEndMechanism, parseSocialContext, parseReferences } from '@/lib/utils'
 import { ARAB_COUNTRIES } from '@/lib/constants/countries'
 import { validateGameData, getFieldError, clearFieldError, validateGameName, validateDescription, validateRules } from '@/lib/utils/validation'
 import { createGame } from '@/lib/actions/game'
@@ -495,8 +495,23 @@ export default function AddGamePage() {
         .trim()
         .replace(/^,+/, '') // إزالة الفواصل من البداية
         .replace(/,+$/, '') // إزالة الفواصل من النهاية
+        .replace(/^[""]|[""]$/g, '') // إزالة علامات الاقتباس
         .trim()
     })
+
+    // تطبيق دوال الفصل على الحقول المحددة
+    if (mappedData.winLoss) {
+      mappedData.winLoss = parseWinLossSystem(mappedData.winLoss)
+    }
+    if (mappedData.startEnd) {
+      mappedData.startEnd = parseStartEndMechanism(mappedData.startEnd)
+    }
+    if (mappedData.socialContext) {
+      mappedData.socialContext = parseSocialContext(mappedData.socialContext)
+    }
+    if (mappedData.references) {
+      mappedData.references = parseReferences(mappedData.references)
+    }
 
     // إذا كان لدينا قواعد في المخزن المؤقت، حولها إلى مصفوفة
     if (rulesBuffer.length > 0) {
@@ -777,7 +792,10 @@ export default function AddGamePage() {
       formDataToSend.set('tagIds', JSON.stringify(tagIds))
       
       formDataToSend.set('uploadedImages', JSON.stringify(formData.uploadedImages))
-      
+
+      // إرسال المراجع
+      formDataToSend.set('references', formData.references || '')
+
       // Debug: Log the FormData being sent
       console.log('=== CLIENT FORM DATA DEBUG ===')
       console.log('FormData entries being sent:')

@@ -220,7 +220,8 @@ export async function createGame(formData: FormData) {
     oralTradition: formData.get('oralTradition') as string,
     socialContext: formData.get('socialContext') as string,
     tagIds: JSON.parse(formData.get('tagIds') as string || '[]'),
-    uploadedImages: JSON.parse(formData.get('uploadedImages') as string || '[]')
+    uploadedImages: JSON.parse(formData.get('uploadedImages') as string || '[]'),
+    references: formData.get('references') as string || ''
   }
 
     console.log('Extracted raw data:', {
@@ -329,6 +330,26 @@ export async function createGame(formData: FormData) {
         })),
         skipDuplicates: true
       })
+    }
+
+    // Create reference records
+    if (rawData.references && rawData.references.trim().length > 0) {
+      // تقسيم المراجع إلى سطور
+      const referenceLines = rawData.references
+        .split(/\n/)
+        .map((line: string) => line.trim())
+        .filter((line: string) => line.length > 0)
+
+      if (referenceLines.length > 0) {
+        await db.reference.createMany({
+          data: referenceLines.map((citation: string) => ({
+            gameId: game.id,
+            citation: citation.replace(/^\d+\.\s*/, ''), // إزالة الترقيم من البداية
+            sourceType: 'غير محدد'
+          })),
+          skipDuplicates: true
+        })
+      }
     }
 
     // Create review log
