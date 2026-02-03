@@ -52,6 +52,12 @@ model Game {
   oralTradition     String?  @db.Text
   socialContext     String?  @db.Text
 
+  // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+  ethnographicMeaning   String? @db.Text // المعنى الإثنوغرافي للتسمية
+  linguisticOrigin      String? @db.Text // الأصل اللغوي للتسمية
+  cognitiveComplexity   String? @db.Text // مستوى التعقيد المعرفي
+  folkCognitiveFunction String? @db.Text // الوظيفة المعرفية الشعبية
+
   // Media and references
   media      Media[]
   references Reference[]

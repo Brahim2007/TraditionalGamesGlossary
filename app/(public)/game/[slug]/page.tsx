@@ -314,6 +314,69 @@ export default async function GameDetailPage({ params }: PageProps) {
               </ContentCard>
             )}
 
+            {/* Ethno-cognitive Archival Section */}
+            {(game.ethnographicMeaning || game.linguisticOrigin || game.cognitiveComplexity || game.folkCognitiveFunction) && (
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-lg overflow-hidden border-2 border-amber-200">
+                <div className="p-5 bg-gradient-to-l from-amber-100/50 to-transparent border-b border-amber-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 bg-gradient-to-br from-amber-600 to-orange-600 rounded-xl flex items-center justify-center shadow-md">
+                      <BookOpen className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-amber-900">الأرشفة الإثنو-معرفية</h3>
+                      <p className="text-xs text-amber-700">توثيق أكاديمي وإثنوغرافي</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-5 space-y-5">
+                  {game.ethnographicMeaning && (
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
+                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                        المعنى الإثنوغرافي للتسمية
+                      </h4>
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                        {game.ethnographicMeaning}
+                      </p>
+                    </div>
+                  )}
+                  {game.linguisticOrigin && (
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
+                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                        الأصل اللغوي للتسمية
+                      </h4>
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                        {game.linguisticOrigin}
+                      </p>
+                    </div>
+                  )}
+                  {game.cognitiveComplexity && (
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
+                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                        مستوى التعقيد المعرفي
+                      </h4>
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                        {game.cognitiveComplexity}
+                      </p>
+                    </div>
+                  )}
+                  {game.folkCognitiveFunction && (
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-amber-900 text-sm flex items-center gap-2">
+                        <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                        الوظيفة المعرفية الشعبية
+                      </h4>
+                      <p className="text-[#333333] leading-relaxed whitespace-pre-wrap bg-white/60 p-4 rounded-xl border border-amber-200">
+                        {game.folkCognitiveFunction}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* References */}
             {references.length > 0 && (
               <ContentCard

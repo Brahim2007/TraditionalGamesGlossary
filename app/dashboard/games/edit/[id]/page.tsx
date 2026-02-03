@@ -99,6 +99,11 @@ export default function EditGamePage() {
     startEnd: '',
     socialContext: '',
     oralTradition: '',
+    // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+    ethnographicMeaning: '',
+    linguisticOrigin: '',
+    cognitiveComplexity: '',
+    folkCognitiveFunction: '',
     references: '',
     imageCaption: '',
     uploadedImages: [] as string[],
@@ -136,6 +141,11 @@ export default function EditGamePage() {
           startEnd: game.startEndMechanism || '',
           socialContext: game.socialContext || '',
           oralTradition: game.oralTradition || '',
+          // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+          ethnographicMeaning: game.ethnographicMeaning || '',
+          linguisticOrigin: game.linguisticOrigin || '',
+          cognitiveComplexity: game.cognitiveComplexity || '',
+          folkCognitiveFunction: game.folkCognitiveFunction || '',
           references: '', // Will be loaded from references table
           imageCaption: game.canonicalName ? `صورة توضيحية للعبة ${game.canonicalName}` : '',
           uploadedImages: game.media?.map((m: any) => m.url) || [],
@@ -219,6 +229,11 @@ export default function EditGamePage() {
         startEndMechanism: formData.startEnd || null,
         oralTradition: formData.oralTradition || null,
         socialContext: formData.socialContext || null,
+        // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+        ethnographicMeaning: formData.ethnographicMeaning || null,
+        linguisticOrigin: formData.linguisticOrigin || null,
+        cognitiveComplexity: formData.cognitiveComplexity || null,
+        folkCognitiveFunction: formData.folkCognitiveFunction || null,
         tagIds,
         uploadedImages: formData.uploadedImages,
       }
@@ -711,6 +726,70 @@ export default function EditGamePage() {
                   اشرح الدلالات الاجتماعية والقيم التربوية المرتبطة باللعبة
                 </p>
               </div>
+
+              {/* حقول الأرشفة الإثنو-معرفية */}
+              <div className="border-t border-gray-200 pt-6 mt-6">
+                <h3 className="text-md font-bold text-brand-deepest mb-4 flex items-center gap-2">
+                  <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">اختياري</span>
+                  الأرشفة الإثنو-معرفية
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  حقول متقدمة للتوثيق الأكاديمي والإثنوغرافي للألعاب التراثية
+                </p>
+
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-brand-deepest">
+                      المعنى الإثنوغرافي للتسمية
+                    </label>
+                    <Textarea
+                      className="min-h-[100px]"
+                      placeholder="مثال: تشير تسمية «الخربقة» في اللهجات المغاربية إلى الإرباك وإعادة خلط المسارات..."
+                      value={formData.ethnographicMeaning}
+                      onChange={(e) => updateField('ethnographicMeaning', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-brand-deepest">
+                      الأصل اللغوي للتسمية
+                    </label>
+                    <Textarea
+                      className="min-h-[80px]"
+                      placeholder="مثال: الخربقة: جذر دارج مرتبط بالخلط والتشويش. السِّيجَة: من «سوّج» أي أحاط وحدّ..."
+                      value={formData.linguisticOrigin}
+                      onChange={(e) => updateField('linguisticOrigin', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-brand-deepest">
+                        مستوى التعقيد المعرفي
+                      </label>
+                      <Textarea
+                        className="min-h-[80px]"
+                        placeholder="مثال: مرتفع – يعتمد على التخطيط متعدد المراحل، قراءة النوايا..."
+                        value={formData.cognitiveComplexity}
+                        onChange={(e) => updateField('cognitiveComplexity', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-brand-deepest">
+                        الوظيفة المعرفية الشعبية
+                      </label>
+                      <Textarea
+                        className="min-h-[80px]"
+                        placeholder="مثال: تدريب التفكير الاستباقي، إدارة القيود، اتخاذ القرار تحت الضغط..."
+                        value={formData.folkCognitiveFunction}
+                        onChange={(e) => updateField('folkCognitiveFunction', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-bold text-brand-deepest">أهازيج ومصطلحات</label>
                 <Textarea

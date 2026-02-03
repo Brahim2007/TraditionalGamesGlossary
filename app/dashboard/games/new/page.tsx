@@ -207,6 +207,11 @@ export default function AddGamePage() {
     startEnd: '',
     socialContext: '',
     oralTradition: '',
+    // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+    ethnographicMeaning: '',
+    linguisticOrigin: '',
+    cognitiveComplexity: '',
+    folkCognitiveFunction: '',
     references: '',
     imageCaption: '', // حقل جديد: التسمية التوضيحية للصورة
     uploadedImages: [] as string[], // روابط الصور المرفوعة
@@ -395,6 +400,11 @@ export default function AddGamePage() {
       { key: 'startEnd', patterns: ['آلية البدء والانتهاء'] },
       { key: 'oralTradition', patterns: ['الموروث الشفهي', 'أهازيج'] },
       { key: 'socialContext', patterns: ['السياق الاجتماعي'] },
+      // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+      { key: 'ethnographicMeaning', patterns: ['المعنى الإثنوغرافي للتسمية', 'المعنى الإثنوغرافي', 'الدلالة الإثنوغرافية'] },
+      { key: 'linguisticOrigin', patterns: ['الأصل اللغوي للتسمية', 'الأصل اللغوي', 'الجذر اللغوي'] },
+      { key: 'cognitiveComplexity', patterns: ['مستوى التعقيد المعرفي', 'التعقيد المعرفي', 'المستوى المعرفي'] },
+      { key: 'folkCognitiveFunction', patterns: ['الوظيفة المعرفية الشعبية', 'الوظيفة المعرفية', 'الفوائد المعرفية'] },
       { key: 'references', patterns: ['المراجع', 'المصادر'] },
       { key: 'imageCaption', patterns: ['تسمية الصورة', 'وصف الصورة', 'صورة توضيحية'] },
     ]
@@ -778,7 +788,12 @@ export default function AddGamePage() {
       formDataToSend.set('startEndMechanism', formData.startEnd || '')
       formDataToSend.set('oralTradition', formData.oralTradition || '')
       formDataToSend.set('socialContext', formData.socialContext || '')
-      
+      // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+      formDataToSend.set('ethnographicMeaning', formData.ethnographicMeaning || '')
+      formDataToSend.set('linguisticOrigin', formData.linguisticOrigin || '')
+      formDataToSend.set('cognitiveComplexity', formData.cognitiveComplexity || '')
+      formDataToSend.set('folkCognitiveFunction', formData.folkCognitiveFunction || '')
+
       // Convert arrays to JSON strings
       const localNamesArray = formData.localNames ? formData.localNames.split(',').map(n => n.trim()).filter(n => n) : []
       formDataToSend.set('localNames', JSON.stringify(localNamesArray))
@@ -1522,6 +1537,70 @@ export default function AddGamePage() {
                     onChange={(e) => updateField('socialContext', e.target.value)}
                   />
                 </div>
+
+                {/* حقول الأرشفة الإثنو-معرفية */}
+                <div className="border-t border-gray-200 pt-6 mt-6">
+                  <h3 className="text-md font-bold text-brand-deepest mb-4 flex items-center gap-2">
+                    <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">اختياري</span>
+                    الأرشفة الإثنو-معرفية
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    حقول متقدمة للتوثيق الأكاديمي والإثنوغرافي للألعاب التراثية
+                  </p>
+
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-brand-deepest">
+                        المعنى الإثنوغرافي للتسمية
+                      </label>
+                      <Textarea
+                        className="h-24"
+                        placeholder="مثال: تشير تسمية «الخربقة» في اللهجات المغاربية إلى الإرباك وإعادة خلط المسارات..."
+                        value={formData.ethnographicMeaning}
+                        onChange={(e) => updateField('ethnographicMeaning', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-brand-deepest">
+                        الأصل اللغوي للتسمية
+                      </label>
+                      <Textarea
+                        className="h-20"
+                        placeholder="مثال: الخربقة: جذر دارج مرتبط بالخلط والتشويش. السِّيجَة: من «سوّج» أي أحاط وحدّ..."
+                        value={formData.linguisticOrigin}
+                        onChange={(e) => updateField('linguisticOrigin', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-deepest">
+                          مستوى التعقيد المعرفي
+                        </label>
+                        <Textarea
+                          className="h-20"
+                          placeholder="مثال: مرتفع – يعتمد على التخطيط متعدد المراحل، قراءة النوايا..."
+                          value={formData.cognitiveComplexity}
+                          onChange={(e) => updateField('cognitiveComplexity', e.target.value)}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-deepest">
+                          الوظيفة المعرفية الشعبية
+                        </label>
+                        <Textarea
+                          className="h-20"
+                          placeholder="مثال: تدريب التفكير الاستباقي، إدارة القيود، اتخاذ القرار تحت الضغط..."
+                          value={formData.folkCognitiveFunction}
+                          onChange={(e) => updateField('folkCognitiveFunction', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-brand-deepest">
                     أهازيج ومصطلحات

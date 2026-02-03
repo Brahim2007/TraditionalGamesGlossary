@@ -116,7 +116,24 @@ const GameCreateSchema = z.object({
   socialContext: z.string()
     .max(4000, 'السياق الاجتماعي يجب ألا يتجاوز 4000 حرف')
     .optional(),
-  
+
+  // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+  ethnographicMeaning: z.string()
+    .max(5000, 'المعنى الإثنوغرافي للتسمية يجب ألا يتجاوز 5000 حرف')
+    .optional(),
+
+  linguisticOrigin: z.string()
+    .max(3000, 'الأصل اللغوي للتسمية يجب ألا يتجاوز 3000 حرف')
+    .optional(),
+
+  cognitiveComplexity: z.string()
+    .max(2000, 'مستوى التعقيد المعرفي يجب ألا يتجاوز 2000 حرف')
+    .optional(),
+
+  folkCognitiveFunction: z.string()
+    .max(4000, 'الوظيفة المعرفية الشعبية يجب ألا يتجاوز 4000 حرف')
+    .optional(),
+
   tagIds: z.array(z.string().cuid('معرف الوسم غير صالح'))
     .optional()
     .default([]),
@@ -219,6 +236,11 @@ export async function createGame(formData: FormData) {
     startEndMechanism: formData.get('startEndMechanism') as string,
     oralTradition: formData.get('oralTradition') as string,
     socialContext: formData.get('socialContext') as string,
+    // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+    ethnographicMeaning: formData.get('ethnographicMeaning') as string,
+    linguisticOrigin: formData.get('linguisticOrigin') as string,
+    cognitiveComplexity: formData.get('cognitiveComplexity') as string,
+    folkCognitiveFunction: formData.get('folkCognitiveFunction') as string,
     tagIds: JSON.parse(formData.get('tagIds') as string || '[]'),
     uploadedImages: JSON.parse(formData.get('uploadedImages') as string || '[]'),
     references: formData.get('references') as string || '',

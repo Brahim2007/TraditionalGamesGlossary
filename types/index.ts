@@ -50,6 +50,11 @@ export interface Game {
   startEndMechanism?: string | null
   oralTradition?: string | null
   socialContext?: string | null
+  // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+  ethnographicMeaning?: string | null
+  linguisticOrigin?: string | null
+  cognitiveComplexity?: string | null
+  folkCognitiveFunction?: string | null
   reviewStatus: ReviewStatus
   createdAt: Date
   updatedAt: Date
@@ -191,6 +196,11 @@ export interface GameFormData {
   startEndMechanism: string
   oralTradition: string
   socialContext: string
+  // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+  ethnographicMeaning: string
+  linguisticOrigin: string
+  cognitiveComplexity: string
+  folkCognitiveFunction: string
   references: string
 }
 
@@ -217,6 +227,11 @@ export interface ParsedImportData {
   startEndMechanism?: string
   oralTradition?: string
   socialContext?: string
+  // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+  ethnographicMeaning?: string
+  linguisticOrigin?: string
+  cognitiveComplexity?: string
+  folkCognitiveFunction?: string
   references?: string
 }
 

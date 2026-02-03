@@ -27,6 +27,11 @@ const fieldMappings = [
   { key: 'startEndMechanism', patterns: ['آلية البدء والانتهاء', 'البدء والانتهاء'] },
   { key: 'oralTradition', patterns: ['الموروث الشفهي', 'أهازيج', 'أهازيج ومصطلحات'] },
   { key: 'socialContext', patterns: ['السياق الاجتماعي', 'القيم الاجتماعية'] },
+  // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+  { key: 'ethnographicMeaning', patterns: ['المعنى الإثنوغرافي للتسمية', 'المعنى الإثنوغرافي', 'الدلالة الإثنوغرافية'] },
+  { key: 'linguisticOrigin', patterns: ['الأصل اللغوي للتسمية', 'الأصل اللغوي', 'الجذر اللغوي'] },
+  { key: 'cognitiveComplexity', patterns: ['مستوى التعقيد المعرفي', 'التعقيد المعرفي', 'المستوى المعرفي'] },
+  { key: 'folkCognitiveFunction', patterns: ['الوظيفة المعرفية الشعبية', 'الوظيفة المعرفية', 'الفوائد المعرفية'] },
   { key: 'references', patterns: ['المراجع', 'المصادر والمراجع', 'المصادر', 'قائمة المراجع'] },
 ] as const
 
@@ -53,6 +58,19 @@ export async function parseArabicText(text: string): Promise<{
     const matchLineToKey = (line: string) => {
       for (const mapping of fieldMappings) {
         for (const pattern of mapping.patterns) {
+          // Check if line contains pattern followed by tab or colon
+          // This handles table-formatted text where field name and value are separated by tab
+          const tabIndex = line.indexOf('\t')
+          if (tabIndex > -1) {
+            const fieldPart = line.substring(0, tabIndex).trim()
+            // Check if field part contains the pattern
+            if (fieldPart.includes(pattern) || pattern.includes(fieldPart)) {
+              // Extract content after tab
+              const content = line.substring(tabIndex + 1).trim()
+              return { key: mapping.key, content }
+            }
+          }
+          
           // Check if line starts with pattern (with optional colon/tab/space after)
           if (line.startsWith(pattern + '\t') || line.startsWith(pattern + ':') || 
               line.startsWith(pattern + ' :') || line.startsWith(pattern + ' ')) {
@@ -134,6 +152,11 @@ export async function parseArabicText(text: string): Promise<{
       startEndMechanism: mappedData.startEndMechanism?.trim(),
       oralTradition: mappedData.oralTradition?.trim(),
       socialContext: mappedData.socialContext?.trim(),
+      // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+      ethnographicMeaning: mappedData.ethnographicMeaning?.trim(),
+      linguisticOrigin: mappedData.linguisticOrigin?.trim(),
+      cognitiveComplexity: mappedData.cognitiveComplexity?.trim(),
+      folkCognitiveFunction: mappedData.folkCognitiveFunction?.trim(),
       references: mappedData.references?.trim(),
     }
 
@@ -299,6 +322,11 @@ export async function convertParsedToGameData(parsedData: ParsedImportData, db: 
       startEndMechanism: parsedData.startEndMechanism || '',
       oralTradition: parsedData.oralTradition || '',
       socialContext: parsedData.socialContext || '',
+      // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+      ethnographicMeaning: parsedData.ethnographicMeaning || '',
+      linguisticOrigin: parsedData.linguisticOrigin || '',
+      cognitiveComplexity: parsedData.cognitiveComplexity || '',
+      folkCognitiveFunction: parsedData.folkCognitiveFunction || '',
       tagIds
     }
 
@@ -441,6 +469,11 @@ export async function generateImportTemplate(format: 'csv' | 'json'): Promise<{
     startEndMechanism: 'آلية البدء...',
     oralTradition: 'صيحات...',
     socialContext: 'سياق اجتماعي...',
+    // Ethno-cognitive archival fields (حقول الأرشفة الإثنو-معرفية)
+    ethnographicMeaning: 'المعنى الإثنوغرافي للتسمية...',
+    linguisticOrigin: 'الأصل اللغوي للتسمية...',
+    cognitiveComplexity: 'مستوى التعقيد المعرفي...',
+    folkCognitiveFunction: 'الوظيفة المعرفية الشعبية...',
     reviewStatus: 'draft'
   }
   
