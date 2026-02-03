@@ -708,14 +708,6 @@ export default function AddGamePage() {
         return
       }
       
-      // Check if user has certified the data
-      const certifyCheckbox = document.getElementById('certify') as HTMLInputElement
-      if (!certifyCheckbox?.checked) {
-        alert('يجب الموافقة على صحة البيانات قبل الإرسال.')
-        setIsSubmitting(false)
-        return
-      }
-      
       // Get country ID from database
       const countryId = await getCountryIdByName(formData.country)
       if (!countryId) {
