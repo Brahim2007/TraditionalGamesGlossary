@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CloudinaryUploadButton } from '@/components/ui/cloudinary-upload-button'
+import { ImageKitUploadButton } from '@/components/ui/imagekit-upload-button'
 import { cn } from '@/lib/utils'
 import { ARAB_COUNTRIES } from '@/lib/constants/countries'
 import { updateGame, deleteGame } from '@/lib/actions/game'
@@ -743,13 +743,13 @@ export default function EditGamePage() {
                     صور توضيحية للعبة
                   </label>
                   
-                  {/* خيار 1: رفع الصور من الكمبيوتر - Cloudinary */}
+                  {/* خيار 1: رفع الصور من الكمبيوتر - ImageKit */}
                   <div className="rounded-lg border border-green-200 bg-green-50 p-4 space-y-3">
                     <div className="flex items-center gap-2">
                       <UploadCloud className="h-4 w-4 text-green-700" />
-                      <h4 className="text-sm font-bold text-green-900">رفع من الكمبيوتر (Cloudinary)</h4>
+                      <h4 className="text-sm font-bold text-green-900">رفع من الكمبيوتر (ImageKit)</h4>
                     </div>
-                    <CloudinaryUploadButton
+                    <ImageKitUploadButton
                       onUploadComplete={(url) => {
                         setFormData(prev => ({
                           ...prev,
@@ -764,7 +764,7 @@ export default function EditGamePage() {
                       maxFiles={5}
                     />
                     <p className="text-xs text-green-700">
-                      ✅ يستخدم Cloudinary (مجاني حتى 25GB) - جاهز للاستخدام!
+                      ✅ يستخدم ImageKit - تخزين سحابي سريع وآمن
                     </p>
                   </div>
                   
