@@ -11,7 +11,22 @@
       "Bash(git push:*)",
       "Bash(git reset:*)",
       "Bash(npm run build:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm show:*)",
+      "Bash(npm info:*)",
+      "Bash(git fetch:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npm run db:seed:*)",
+      "Bash(git checkout:*)",
+      "Bash(del c:projectsTraditionalGamesGlossaryscriptsverify-import.ts)",
+      "Bash(git -C c:projectsTraditionalGamesGlossary status)"
     ]
   }
 }
