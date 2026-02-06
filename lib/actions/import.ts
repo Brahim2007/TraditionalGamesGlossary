@@ -1,8 +1,10 @@
 'use server'
 
-import { normalizeCountryName, parseRulesToArray } from '@/lib/utils'
+import { normalizeCountryName, parseRulesToArray, createSlug } from '@/lib/utils'
 import type { ParsedImportData } from '@/types'
 import { validateCSVRow, validateJSONData, validateBulkImport } from '@/lib/utils/import-validation'
+import { db } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
 
 // Field mapping configuration for Arabic text parsing
 const fieldMappings = [
@@ -33,6 +35,8 @@ const fieldMappings = [
   { key: 'cognitiveComplexity', patterns: ['مستوى التعقيد المعرفي', 'التعقيد المعرفي', 'المستوى المعرفي'] },
   { key: 'folkCognitiveFunction', patterns: ['الوظيفة المعرفية الشعبية', 'الوظيفة المعرفية', 'الفوائد المعرفية'] },
   { key: 'references', patterns: ['المراجع', 'المصادر والمراجع', 'المصادر', 'قائمة المراجع'] },
+  { key: 'imageUrl', patterns: ['رابط الصورة', 'صورة اللعبة', 'الصورة'] },
+  { key: 'imageCaption', patterns: ['تسمية الصورة', 'وصف الصورة', 'التسمية التوضيحية'] },
 ] as const
 
 /**
@@ -158,6 +162,8 @@ export async function parseArabicText(text: string): Promise<{
       cognitiveComplexity: mappedData.cognitiveComplexity?.trim(),
       folkCognitiveFunction: mappedData.folkCognitiveFunction?.trim(),
       references: mappedData.references?.trim(),
+      imageUrl: mappedData.imageUrl?.trim(),
+      imageCaption: mappedData.imageCaption?.trim(),
     }
 
     return { success: true, data: parsedData }
@@ -501,4 +507,265 @@ export async function generateImportTemplate(format: 'csv' | 'json'): Promise<{
     template,
     instructions
   }
+}
+
+// ==================== BULK IMPORT ====================
+
+export interface BulkImportResult {
+  total: number
+  successful: number
+  failed: number
+  results: Array<{
+    index: number
+    name: string
+    success: boolean
+    gameId?: string
+    error?: string
+  }>
+}
+
+/**
+ * Bulk import games from text separated by ---
+ * استيراد جماعي للألعاب من نص مفصول بـ ---
+ */
+export async function bulkImportGames(
+  text: string,
+  _contributorId?: string
+): Promise<BulkImportResult> {
+  // Get current user
+  const user = await getCurrentUser()
+  if (!user) {
+    return { total: 0, successful: 0, failed: 0, results: [{ index: 0, name: '', success: false, error: 'غير مصرح بالوصول. يرجى تسجيل الدخول.' }] }
+  }
+  if (!['editor', 'reviewer', 'admin'].includes(user.role)) {
+    return { total: 0, successful: 0, failed: 0, results: [{ index: 0, name: '', success: false, error: 'ليس لديك صلاحية لاستيراد الألعاب.' }] }
+  }
+  const contributorId = user.id
+
+  // Split text by separator
+  const sections = text.split(/\n\s*---\s*\n/).filter(s => s.trim().length > 0)
+
+  const result: BulkImportResult = {
+    total: sections.length,
+    successful: 0,
+    failed: 0,
+    results: []
+  }
+
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i]
+    const gameIndex = i + 1
+
+    try {
+      // 1. Parse the text section
+      const parseResult = await parseArabicText(section)
+      if (!parseResult.success || !parseResult.data) {
+        result.failed++
+        result.results.push({
+          index: gameIndex,
+          name: `لعبة ${gameIndex}`,
+          success: false,
+          error: parseResult.errors?.join(', ') || 'فشل في تحليل النص'
+        })
+        continue
+      }
+
+      const parsed = parseResult.data
+      const gameName = parsed.name || `لعبة ${gameIndex}`
+
+      // 2. Validate required fields
+      const validation = await validateImportData(parsed)
+      if (!validation.valid) {
+        result.failed++
+        result.results.push({
+          index: gameIndex,
+          name: gameName,
+          success: false,
+          error: validation.errors.join(', ')
+        })
+        continue
+      }
+
+      // 3. Resolve country
+      const countryName = parsed.country ? normalizeCountryName(parsed.country) : ''
+      const country = countryName ? await db.country.findFirst({
+        where: { name: { contains: countryName, mode: 'insensitive' } }
+      }) : null
+
+      if (!country) {
+        result.failed++
+        result.results.push({
+          index: gameIndex,
+          name: gameName,
+          success: false,
+          error: `الدولة "${parsed.country}" غير موجودة في قاعدة البيانات`
+        })
+        continue
+      }
+
+      // 4. Resolve or create heritage field
+      let heritageFieldId: string
+      if (parsed.heritageField) {
+        let hf = await db.heritageField.findFirst({
+          where: { name: { contains: parsed.heritageField, mode: 'insensitive' } }
+        })
+        if (!hf) {
+          hf = await db.heritageField.create({
+            data: {
+              name: parsed.heritageField,
+              description: parsed.heritageField,
+              category: 'الممارسات الاجتماعية والطقوس'
+            }
+          })
+        }
+        heritageFieldId = hf.id
+      } else {
+        const defaultHf = await db.heritageField.findFirst({
+          where: { name: { contains: 'الألعاب الشعبية' } }
+        })
+        heritageFieldId = defaultHf!.id
+      }
+
+      // 5. Determine gameType
+      let gameType = 'شعبية'
+      if (parsed.tags) {
+        if (parsed.tags.includes('حركية') || parsed.tags.includes('حركي')) gameType = 'حركية'
+        else if (parsed.tags.includes('ذهنية') || parsed.tags.includes('ذهني')) gameType = 'ذهنية'
+        else if (parsed.tags.includes('طريفة') || parsed.tags.includes('فكاهة')) gameType = 'طريفة'
+      }
+      // Override with explicit gameType from field mapping if available
+      // Check if description/tags hint at a specific type
+      const rawGameType = section.match(/نوع اللعبة[\t:]\s*(.+)/)?.[1]?.trim()
+      if (rawGameType) gameType = rawGameType
+
+      // 6. Create slug and ensure uniqueness
+      let slug = createSlug(gameName)
+      const existingSlug = await db.game.findFirst({ where: { slug } })
+      if (existingSlug) {
+        slug = slug + '-' + Date.now()
+      }
+
+      // 7. Process arrays
+      const localNames = parsed.localNames
+        ? parsed.localNames.split(/[،,]/).map(n => n.trim()).filter(Boolean)
+        : []
+
+      const tools = parsed.tools
+        ? [parsed.tools]
+        : []
+
+      const rules = parsed.rules && parsed.rules.length > 0
+        ? parsed.rules
+        : parseRulesToArray(section.match(/قواعد اللعب[\t:]\s*([\s\S]*?)(?=\n[^\n]*[\t:]|$)/)?.[1] || '')
+
+      // 8. Create the game
+      const game = await db.game.create({
+        data: {
+          canonicalName: gameName,
+          localNames,
+          slug,
+          countryId: country.id,
+          region: parsed.region || '',
+          heritageFieldId,
+          gameType,
+          ageGroup: parsed.ageGroup || '',
+          ageGroupDetails: parsed.ageGroupDetails || '',
+          practitioners: parsed.practitioners || '',
+          practitionersDetails: parsed.practitionersDetails || '',
+          playersCount: parsed.playersCount || '',
+          playersDetails: parsed.playersDetails || '',
+          tools,
+          environment: parsed.environment || '',
+          timing: parsed.timing || '',
+          description: parsed.description || '',
+          rules: rules.length > 0 ? rules : ['لا توجد قواعد محددة'],
+          winLossSystem: parsed.winLossSystem || '',
+          startEndMechanism: parsed.startEndMechanism || '',
+          oralTradition: parsed.oralTradition || '',
+          socialContext: parsed.socialContext || '',
+          ethnographicMeaning: parsed.ethnographicMeaning || '',
+          linguisticOrigin: parsed.linguisticOrigin || '',
+          cognitiveComplexity: parsed.cognitiveComplexity || '',
+          folkCognitiveFunction: parsed.folkCognitiveFunction || '',
+          reviewStatus: 'published',
+          publishedAt: new Date(),
+          contributorId,
+        }
+      })
+
+      // 9. Create media if image URL provided
+      if (parsed.imageUrl) {
+        await db.media.create({
+          data: {
+            gameId: game.id,
+            type: 'image',
+            url: parsed.imageUrl,
+            caption: parsed.imageCaption || `صورة توضيحية للعبة ${gameName}`,
+            source: 'استيراد جماعي'
+          }
+        })
+      }
+
+      // 10. Create references
+      if (parsed.references) {
+        const refLines = parsed.references.split(/\n/).filter(l => l.trim().length > 0)
+        for (const refLine of refLines) {
+          const cleaned = refLine.replace(/^\d+[\.\-\)]\s*/, '').trim()
+          if (cleaned.length > 0) {
+            // Try to extract year
+            const yearMatch = cleaned.match(/\((\d{4})\)/)
+            await db.reference.create({
+              data: {
+                gameId: game.id,
+                citation: cleaned,
+                sourceType: cleaned.includes('Revue') || cleaned.includes('Journal') ? 'دراسة أكاديمية' : 'كتاب',
+                year: yearMatch ? parseInt(yearMatch[1]) : null
+              }
+            })
+          }
+        }
+      }
+
+      // 11. Create tags
+      if (parsed.tags) {
+        const tagNames = parsed.tags
+          .split(/[،,]/)
+          .map(t => t.replace(/#/g, '').trim())
+          .filter(Boolean)
+
+        for (const tagName of tagNames) {
+          let tag = await db.tag.findFirst({
+            where: { name: { contains: tagName, mode: 'insensitive' } }
+          })
+          if (!tag) {
+            tag = await db.tag.create({
+              data: { name: tagName, description: tagName, category: 'عام' }
+            })
+          }
+          await db.gameTag.create({
+            data: { gameId: game.id, tagId: tag.id }
+          }).catch(() => {}) // Skip if duplicate
+        }
+      }
+
+      result.successful++
+      result.results.push({
+        index: gameIndex,
+        name: gameName,
+        success: true,
+        gameId: game.id
+      })
+
+    } catch (error: any) {
+      result.failed++
+      result.results.push({
+        index: gameIndex,
+        name: `لعبة ${gameIndex}`,
+        success: false,
+        error: error.message || 'خطأ غير متوقع'
+      })
+    }
+  }
+
+  return result
 }

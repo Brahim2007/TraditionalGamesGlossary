@@ -233,6 +233,8 @@ export interface ParsedImportData {
   cognitiveComplexity?: string
   folkCognitiveFunction?: string
   references?: string
+  imageUrl?: string
+  imageCaption?: string
 }
 
 // API response types

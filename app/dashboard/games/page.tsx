@@ -11,8 +11,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { 
-  Gamepad2, Plus, Search, Filter, Eye, Edit, Clock, ChevronLeft, ChevronRight, 
-  Globe, Award, Tag, Users, Calendar, MapPin, X, Loader2, SlidersHorizontal 
+  Gamepad2, Plus, Search, Filter, Eye, Edit, Clock, ChevronLeft, ChevronRight,
+  Globe, Award, Tag, Users, Calendar, MapPin, X, Loader2, SlidersHorizontal, Upload
 } from 'lucide-react'
 import { GameActions } from '@/components/dashboard/GameActions'
 
@@ -166,12 +166,20 @@ export default function GamesPage() {
           </div>
           <div className="flex items-center gap-3">
             {user && (user.role === 'editor' || user.role === 'reviewer' || user.role === 'admin') && (
-              <Link href="/dashboard/games/new">
-                <Button className="bg-gradient-to-r from-brand to-brand-deep hover:from-brand-deep hover:to-brand text-white shadow-lg hover:shadow-xl transition-all px-6 py-6 text-base">
-                  <Plus className="w-5 h-5 ml-2" />
-                  إضافة لعبة جديدة
-                </Button>
-              </Link>
+              <>
+                <Link href="/dashboard/games/import">
+                  <Button variant="outline" className="border-brand text-brand hover:bg-brand/5 px-6 py-6 text-base">
+                    <Upload className="w-5 h-5 ml-2" />
+                    استيراد جماعي
+                  </Button>
+                </Link>
+                <Link href="/dashboard/games/new">
+                  <Button className="bg-gradient-to-r from-brand to-brand-deep hover:from-brand-deep hover:to-brand text-white shadow-lg hover:shadow-xl transition-all px-6 py-6 text-base">
+                    <Plus className="w-5 h-5 ml-2" />
+                    إضافة لعبة جديدة
+                  </Button>
+                </Link>
+              </>
             )}
           </div>
         </div>
