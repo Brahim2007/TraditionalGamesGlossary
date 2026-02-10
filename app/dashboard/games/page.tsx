@@ -474,7 +474,6 @@ export default function GamesPage() {
                   className="border-2 border-gray-200 rounded-xl p-6 hover:border-brand/30 hover:bg-brand/5 transition-all shadow-sm hover:shadow-md"
                 >
                   <div className="flex items-start justify-between gap-6">
-                    <div className="flex items-start gap-6">
                     {/* Image Thumbnail Section - Left Side */}
                     <div className="w-32 h-32 flex-shrink-0 relative">
                       {game.media && game.media.length > 0 ? (
