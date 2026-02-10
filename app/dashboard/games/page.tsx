@@ -10,11 +10,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { 
+import {
   Gamepad2, Plus, Search, Filter, Eye, Edit, Clock, ChevronLeft, ChevronRight,
-  Globe, Award, Tag, Users, Calendar, MapPin, X, Loader2, SlidersHorizontal, Upload
+  Globe, Award, Tag, Users, Calendar, MapPin, X, Loader2, SlidersHorizontal, Upload,
+  ImagePlus, CheckCircle
 } from 'lucide-react'
 import { GameActions } from '@/components/dashboard/GameActions'
+import { addQuickImage } from '@/lib/actions/game'
+import { ImageKitUploadButton } from '@/components/ui/imagekit-upload-button'
 
 export default function GamesPage() {
   const router = useRouter()
@@ -45,6 +48,8 @@ export default function GamesPage() {
   })
   const [countries, setCountries] = useState<any[]>([])
   const [gameTypes, setGameTypes] = useState<string[]>([])
+  const [quickUploadGameId, setQuickUploadGameId] = useState<string | null>(null)
+  const [uploadingGameId, setUploadingGameId] = useState<string | null>(null)
 
   const ITEMS_PER_PAGE = 10
 
@@ -111,6 +116,23 @@ export default function GamesPage() {
       sortBy: 'newest'
     })
     setCurrentPage(1)
+  }
+
+  const handleQuickImageUpload = async (gameId: string, imageUrl: string) => {
+    setUploadingGameId(gameId)
+    try {
+      const result = await addQuickImage(gameId, imageUrl)
+      if (result.success) {
+        setQuickUploadGameId(null)
+        loadData()
+      } else {
+        alert(result.message || 'حدث خطأ')
+      }
+    } catch {
+      alert('حدث خطأ أثناء حفظ الصورة')
+    } finally {
+      setUploadingGameId(null)
+    }
   }
 
   const hasActiveFilters = searchQuery.length > 0 || filters.status !== 'all' || filters.country !== 'all' || filters.gameType !== 'all'
@@ -452,6 +474,48 @@ export default function GamesPage() {
                   className="border-2 border-gray-200 rounded-xl p-6 hover:border-brand/30 hover:bg-brand/5 transition-all shadow-sm hover:shadow-md"
                 >
                   <div className="flex items-start justify-between gap-6">
+                    <div className="flex items-start gap-6">
+                    {/* Image Thumbnail Section - Left Side */}
+                    <div className="w-32 h-32 flex-shrink-0 relative">
+                      {game.media && game.media.length > 0 ? (
+                        <div className="w-full h-full relative group">
+                          <img 
+                            src={game.media.find((m: any) => m.type === 'main')?.url || game.media[0].url} 
+                            alt={game.canonicalName}
+                            className="w-full h-full object-cover rounded-xl border-2 border-gray-200 shadow-sm"
+                          />
+                          <button
+                            onClick={() => setQuickUploadGameId(game.id)}
+                            className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl"
+                          >
+                            <ImagePlus className="w-8 h-8 text-white" />
+                          </button>
+                        </div>
+                      ) : quickUploadGameId === game.id ? (
+                        <div className="w-full h-full bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center">
+                          {uploadingGameId === game.id ? (
+                            <Loader2 className="w-8 h-8 animate-spin text-brand" />
+                          ) : (
+                            <ImageKitUploadButton
+                              onUploadComplete={(url) => handleQuickImageUpload(game.id, url)}
+                              onUploadError={(error) => {
+                                console.error('Upload error:', error)
+                                setQuickUploadGameId(null)
+                              }}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setQuickUploadGameId(game.id)}
+                          className="w-full h-full bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-brand hover:bg-brand/5 transition-all group"
+                        >
+                          <ImagePlus className="w-8 h-8 text-gray-400 group-hover:text-brand mb-2" />
+                          <span className="text-xs text-gray-500 group-hover:text-brand font-medium">إضافة صورة</span>
+                        </button>
+                      )}
+                    </div>
+                    
                     <div className="flex-1 space-y-4">
                       {/* Header Section */}
                       <div className="flex items-start gap-4">

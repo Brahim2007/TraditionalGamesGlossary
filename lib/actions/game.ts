@@ -1479,3 +1479,57 @@ export async function getAllCountries() {
     }
   }
 }
+
+// ==================== QUICK IMAGE UPLOAD ====================
+
+/**
+ * Add an image to a game quickly without editing all fields
+ * إضافة صورة سريعة للعبة بدون تعديل كل الحقول
+ */
+export async function addQuickImage(gameId: string, imageUrl: string): Promise<{
+  success: boolean
+  message?: string
+}> {
+  try {
+    const user = await getCurrentUser()
+    if (!user) {
+      return { success: false, message: 'غير مصرح بالوصول' }
+    }
+
+    if (!['editor', 'reviewer', 'admin'].includes(user.role)) {
+      return { success: false, message: 'ليس لديك صلاحية لإضافة صور' }
+    }
+
+    if (!imageUrl || !imageUrl.startsWith('http')) {
+      return { success: false, message: 'رابط الصورة غير صالح' }
+    }
+
+    const game = await db.game.findUnique({
+      where: { id: gameId },
+      select: { id: true, canonicalName: true }
+    })
+
+    if (!game) {
+      return { success: false, message: 'اللعبة غير موجودة' }
+    }
+
+    await db.media.create({
+      data: {
+        gameId,
+        url: imageUrl,
+        type: 'image',
+        caption: `صورة توضيحية للعبة ${game.canonicalName}`
+      }
+    })
+
+    revalidatePath('/dashboard/games')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error adding quick image:', error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'حدث خطأ أثناء إضافة الصورة'
+    }
+  }
+}

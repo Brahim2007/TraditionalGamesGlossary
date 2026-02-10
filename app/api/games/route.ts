@@ -98,6 +98,12 @@ export async function GET(request: NextRequest) {
         country: true,
         heritageField: true,
         tags: { include: { tag: true } },
+        media: {
+          where: { type: 'image' },
+          orderBy: { createdAt: 'asc' },
+          take: 1,
+          select: { id: true, url: true }
+        },
         contributor: {
           select: { name: true }
         }
