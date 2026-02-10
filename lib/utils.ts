@@ -68,14 +68,20 @@ export function parseRulesToArray(text: string): string[] {
   // First, split by newlines
   let lines = text.split(/[\n\r]+/)
 
-  // If we only got one line, try splitting by period followed by Arabic letter
-  // This handles cases like: "قاعدة أولى.قاعدة ثانية.قاعدة ثالثة"
+  // If we only got one line, try alternative splitting strategies
   if (lines.length === 1 && lines[0].length > 0) {
-    // Split on period followed directly by Arabic letter (no space between)
-    // Using positive lookahead to keep the Arabic letter with the next sentence
-    const splitByPeriod = lines[0].split(/\.(?=[\u0600-\u06FF])/)
-    if (splitByPeriod.length > 1) {
-      lines = splitByPeriod
+    // Strategy 1: Split by numbered patterns (e.g., ".2. ", ".3) ")
+    // This handles: "1. قاعدة أولى.2. قاعدة ثانية.3. قاعدة ثالثة"
+    const splitByNumber = lines[0].split(/\.(?=\s*\d+[\.\)\-]\s)/)
+    if (splitByNumber.length > 1) {
+      lines = splitByNumber
+    } else {
+      // Strategy 2: Split on period followed directly by Arabic letter (no space between)
+      // This handles cases like: "قاعدة أولى.قاعدة ثانية.قاعدة ثالثة"
+      const splitByPeriod = lines[0].split(/\.(?=[\u0600-\u06FF])/)
+      if (splitByPeriod.length > 1) {
+        lines = splitByPeriod
+      }
     }
   }
 
