@@ -4,6 +4,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap');
 
+/* ==================== LOCAL FONTS ==================== */
+@font-face {
+  font-family: 'TS Hanazad Display';
+  src: url('/alfont_com_TSHanazad-Display.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ==================== BASE STYLES ==================== */
 @layer base {
   :root {
@@ -39,6 +48,16 @@
     font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans Arabic Fallback', 'Noto Sans Arabic', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom font classes */
+  .font-display {
+    font-family: 'TS Hanazad Display', 'IBM Plex Sans Arabic', sans-serif;
+  }
+
+  /* Heading fonts - using TSHanazad Display for titles */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'TS Hanazad Display', 'IBM Plex Sans Arabic', sans-serif;
   }
 
   /* RTL Specific Styles */
