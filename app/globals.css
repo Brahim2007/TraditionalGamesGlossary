@@ -4,15 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap');
 
-/* ==================== LOCAL FONTS ==================== */
-@font-face {
-  font-family: 'TS Hanazad Display';
-  src: url('/alfont_com_TSHanazad-Display.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ==================== BASE STYLES ==================== */
 @layer base {
   :root {

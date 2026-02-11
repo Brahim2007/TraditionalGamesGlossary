@@ -48,8 +48,6 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        {/* Local TSHanazad Display Font */}
-        <link rel="preload" href="/alfont_com_TSHanazad-Display.otf" as="font" type="font/otf" crossOrigin="" />
         {/* Cloudinary Upload Widget Script */}
         <script
           src="https://upload-widget.cloudinary.com/global/all.js"

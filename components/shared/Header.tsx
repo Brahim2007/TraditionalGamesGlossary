@@ -17,10 +17,10 @@ export async function Header() {
               <LayoutGrid className="h-6 w-6" />
             </div>
             <div>
-              <span className="block font-bold text-lg leading-none tracking-tight text-brand-deepest font-display">
+              <span className="block font-bold text-lg leading-none tracking-tight text-brand-deepest">
                 المسرد التوثيقي
               </span>
-              <span className="text-[10px] font-medium text-gray-400 font-display">
+              <span className="text-[10px] font-medium text-gray-400">
                 للألعاب التراثية العربية
               </span>
             </div>
